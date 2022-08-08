@@ -146,7 +146,7 @@ rows.forEach((row, index) => {
 });
 
 const doMulai = (id) => {
-  console.log(id);
+  // console.log(id);
   router.push({ name: "admin-ujian-mulai", params: { id } });
 };
 </script>

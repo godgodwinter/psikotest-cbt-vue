@@ -1,6 +1,10 @@
+<script setup>
+import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
+</script>
 <template>
+  <BreadCrumb />
   <div class="about">
-    <h1>This is an about page</h1>
+    <h1>This is an about page 2</h1>
   </div>
 </template>
 

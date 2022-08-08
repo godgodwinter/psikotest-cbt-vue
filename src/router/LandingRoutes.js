@@ -4,6 +4,15 @@ const LandingRoutes = [
     name: "LandingLayout",
     component: () => import("@/layouts/LandingLayout.vue"),
     redirect: "/home",
+    meta: {
+      title: "Home",
+      icon: "mdi-home",
+      breadcrumb: {
+        name: "Home",
+        path: "/landing",
+        goto: "LandingLayout",
+      },
+    },
     children: [
       {
         path: "/",
@@ -19,6 +28,15 @@ const LandingRoutes = [
         path: "/about",
         name: "about",
         component: () => import("@/views/landing/AboutView.vue"),
+        meta: {
+          title: "About",
+          breadcrumb: {
+            name: "About",
+            path: `/about`,
+            goto: "about",
+            icon: "account_circle",
+          },
+        },
       },
       {
         path: "/login",

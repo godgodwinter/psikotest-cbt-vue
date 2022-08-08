@@ -1,4 +1,5 @@
 <script setup>
+import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
@@ -15,6 +16,7 @@ const onMulaiUjian = (soal_id = 0) => {
 </script>
 
 <template>
+  <BreadCrumb />
   <!-- <div class="q-pa-md">
     <q-card class="my-card">
       <q-parallax

@@ -1,4 +1,5 @@
 <script setup>
+import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
@@ -9,6 +10,7 @@ const lorem =
 </script>
 
 <template>
+  <BreadCrumb />
   <div class="q-pa-md q-gutter-md">
     <div>
       <q-chip
