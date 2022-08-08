@@ -1,28 +1,34 @@
 <script setup>
-import { ref } from "vue";
 import CardA from "@/components/skeleton/CardA.vue";
+import { useQuasar } from "quasar";
 
-const data = [
-  {
-    id: 1,
-    name: "nama",
-    age: "22",
-  },
-  {
-    id: 2,
-    name: "nama2",
-    age: "24",
-  },
-];
+const $q = useQuasar();
+
+const showNotif = () => {
+  $q.notify({
+    color: "teal",
+    message: "Quasar is cool! Right?",
+    icon: "tag_faces",
+    position: "top-right",
+    timeout: 1000,
+  });
+};
+
+const showNotifTwo = () => {
+  $q.notify({
+    message: "Jim pinged you.",
+    color: "purple",
+  });
+};
 </script>
 <template>
   <div>
-    <span v-for="item in data" :key="item.id">
-      <button>
-        {{ item.id }}
-        {{ item.name }} - {{ item.age }}
-      </button></span
-    >
+    <q-btn round size="sm" color="accent" @click="showNotif('left')">
+      <q-icon name="arrow_back" />
+    </q-btn>
+    <q-btn round size="sm" color="accent" @click="showNotifTwo('left')">
+      <q-icon name="arrow_forward" />
+    </q-btn>
   </div>
   <card-a />
   <div class="q-pa-xl row items-start q-gutter-lg">

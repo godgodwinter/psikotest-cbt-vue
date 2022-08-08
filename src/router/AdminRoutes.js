@@ -8,6 +8,7 @@ const AdminRoutes = [
     component: () => import("@/layouts/AdminLayout.vue"),
     redirect: `${prefix}/home`,
     meta: {
+      requiresAuth: true,
       title: "Admin",
       icon: "mdi-home",
       breadcrumb: {
