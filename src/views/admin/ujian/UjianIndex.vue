@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
+// import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const columns = [
@@ -19,22 +20,26 @@ const columns = [
   {
     name: "nama",
     required: true,
-    label: "Nama",
+    label: "Nama Paket",
     align: "left",
     field: (row) => row.nama,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: "waktu",
+    name: "tgl",
     align: "center",
-    label: "Waktu (menit)",
-    field: "waktu",
+    label: "Tanggal Ujian",
+    field: "tgl",
     sortable: true,
     sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
   },
-  { name: "jml_soal", label: "Jumlah Soal", field: "jml_soal", sortable: true },
-  { name: "tipe", label: "Tipe", field: "tipe" },
+  {
+    name: "jml_kategori",
+    label: "Jumlah Kategori Soal",
+    field: "jml_kategori",
+    sortable: true,
+  },
   {
     name: "status",
     label: "Status",
@@ -45,94 +50,15 @@ const columns = [
 
 const seed = [
   {
-    nama: "Bahasa Indonesia",
-    waktu: 60,
-    jml_soal: 20,
-    tipe: "Pilihan ganda",
+    nama: "Paket Ujian 1",
+    tgl: "2022-02-02",
+    jml_kategori: 20,
     status: "Belum",
   },
   {
-    nama: "Bahasa Inggris",
-    waktu: 30,
-    jml_soal: 10,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
-    status: "Belum",
-  },
-  {
-    nama: "IPA",
-    waktu: 90,
-    jml_soal: 30,
-    tipe: "Pilihan ganda",
+    nama: "Paket Ujian 2",
+    tgl: "2022-04-02",
+    jml_kategori: 20,
     status: "Belum",
   },
 ];
@@ -145,14 +71,15 @@ rows.forEach((row, index) => {
   row.index = index + 1;
 });
 
-const doMulai = (id) => {
+const doDetail = (id) => {
   // console.log(id);
-  router.push({ name: "admin-ujian-mulai", params: { id } });
+  router.push({ name: "admin-ujian-detail-index", params: { id } });
 };
 </script>
 <template>
+  <BreadCrumb />
   <div class="q-pa-md">
-    <q-table title="Treats" :rows="rows" :columns="columns" row-key="index">
+    <q-table title="LIST UJIAN" :rows="rows" :columns="columns" row-key="index">
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -160,11 +87,11 @@ const doMulai = (id) => {
               <div class="q-pa-xs q-gutter-sm">
                 <q-btn
                   round
-                  @click="doMulai(props.row.index)"
+                  @click="doDetail(props.row.index)"
                   icon="not_started"
                   color="teal"
                 >
-                  <q-tooltip> Mulai {{ props.row.index }} </q-tooltip></q-btn
+                  <q-tooltip> Detail {{ props.row.index }} </q-tooltip></q-btn
                 >
               </div>
             </div>

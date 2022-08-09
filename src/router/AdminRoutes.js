@@ -30,7 +30,7 @@ const AdminRoutes = [
             goto: `${prefixName}dashboard`,
           },
         },
-        component: () => import("@/views/landing/HomeView.vue"),
+        component: () => import("@/views/admin/dashboard/DashboardIndex.vue"),
       },
       {
         path: `${prefix}/about`,
@@ -49,53 +49,103 @@ const AdminRoutes = [
       {
         path: `${prefix}/ujian`,
         name: "admin-ujian",
-        component: () => import("@/views/admin/ujian/UjianIndex.vue"),
+        component: () => import("@/views/admin/ujian/UjianLayout.vue"),
         meta: {
           title: "Ujian",
           icon: "mdi-home",
           breadcrumb: {
-            name: "Ujian",
+            name: "List Ujian",
             path: `${prefix}/ujian`,
             goto: "admin-ujian",
           },
         },
-      },
-      {
-        path: `${prefix}/ujian/:id?/mulai`,
-        name: "admin-ujian-mulai",
-        component: () =>
-          import("@/views/admin/ujian/examples/UjianKonfirmasiMulai.vue"),
-        meta: {
-          title: "Ujian",
-          icon: "mdi-home",
-          breadcrumb: {
-            name: "admin-ujian-mulai",
-            path: `${prefix}/ujian/:id?/mulai`,
-            goto: "admin-ujian-mulai",
-            params: {
-              id: "id",
+        redirect: `${prefix}/ujianindex`,
+        children: [
+          {
+            path: `${prefix}/ujianindex/`,
+            name: "admin-ujian-index",
+            component: () => import("@/views/admin/ujian/UjianIndex.vue"),
+            meta: {
+              title: "Ujian",
+              icon: "mdi-home",
+              breadcrumb: {
+                name: "Index",
+                path: `${prefix}/ujian`,
+                goto: "admin-ujian-index",
+              },
             },
           },
-        },
-      },
-      {
-        path: `${prefix}/ujian/:id?/proses/:soal_id?`,
-        name: "admin-ujian-proses",
-        component: () => import("@/views/admin/ujian/examples/UjianProses.vue"),
-        meta: {
-          title: "Ujian",
-          icon: "mdi-home",
-          breadcrumb: {
-            name: "Proses Ujian",
-            path: `${prefix}/ujian/:id?/proses/:soal_id?`,
-            goto: "admin-ujian-proses",
-            params: {
-              id: "id",
-              soal_id: "soal_id",
+          {
+            path: `${prefix}/ujian/:id/detail`,
+            name: "admin-ujian-detail",
+            component: () => import("@/views/admin/ujian/UjianDetail.vue"),
+            meta: {
+              title: "Ujian",
+              icon: "mdi-home",
+              breadcrumb: {
+                name: " Kategori Soal",
+                path: `${prefix}/ujian`,
+                goto: "admin-ujian-detail-index",
+              },
             },
+            redirect: `${prefix}/ujian/:id/detailindex`,
+            children: [
+              {
+                path: `${prefix}/ujian/:id/detailindex`,
+                name: "admin-ujian-detail-index",
+                component: () =>
+                  import("@/views/admin/ujian/detail/UjianDetailIndex.vue"),
+                meta: {
+                  title: "Index",
+                  icon: "mdi-home",
+                  breadcrumb: {
+                    name: "Index",
+                    path: `${prefix}/ujian`,
+                    goto: "admin-ujian-detail-index",
+                  },
+                },
+              },
+              {
+                path: `${prefix}/ujian/:id/detail/:kategori_id/mulai`,
+                name: "admin-ujian-detail-mulai",
+                component: () =>
+                  import("@/views/admin/ujian/detail/UjianDetailMulai.vue"),
+                meta: {
+                  title: "Ujian",
+                  icon: "mdi-home",
+                  breadcrumb: {
+                    name: "Mulai",
+                    goto: "admin-ujian-detail-mulai",
+                    params: {
+                      id: "id",
+                    },
+                  },
+                },
+              },
+              {
+                path: `${prefix}/ujian/:id/detail/:kategori_id/proses/:soal_id`,
+                name: "admin-ujian-detail-proses",
+                component: () =>
+                  import("@/views/admin/ujian/examples/UjianProses.vue"),
+                meta: {
+                  title: "Ujian",
+                  icon: "mdi-home",
+                  breadcrumb: {
+                    name: "Proses Ujian",
+                    path: `${prefix}/ujian/:id?/proses/:soal_id?`,
+                    goto: "admin-ujian-detail-proses",
+                    params: {
+                      id: "id",
+                      soal_id: "soal_id",
+                    },
+                  },
+                },
+              },
+            ],
           },
-        },
+        ],
       },
+
       {
         path: `${prefix}/login`,
         name: "admin-login",

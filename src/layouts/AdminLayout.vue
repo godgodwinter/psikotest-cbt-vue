@@ -8,31 +8,31 @@ const $q = useQuasar();
 const menuList = [
   {
     icon: "home",
-    label: "Dashboard",
+    label: "DASHBOARD",
     separator: true,
     link: "admin-dashboard",
   },
   {
     icon: "account_circle",
-    label: "Profile",
+    label: "PROFILE",
     separator: false,
     link: "admin-about",
   },
-  {
-    icon: "history",
-    label: "Riwayat Ujian",
-    separator: false,
-    link: "admin-about",
-  },
+  // {
+  //   icon: "history",
+  //   label: "Riwayat Ujian",
+  //   separator: false,
+  //   link: "admin-about",
+  // },
   {
     icon: "cloud",
-    label: "Ujian Aktif",
+    label: "LIST UJIAN",
     separator: true,
     link: "admin-ujian",
   },
   {
     icon: "settings",
-    label: "Settings",
+    label: "PENGATURAN",
     separator: false,
     link: "admin-about",
   },
@@ -104,6 +104,7 @@ const doLogout = async () => {
         <q-tabs align="left">
           <q-route-tab :to="{ name: 'admin-dashboard' }" label="Home" />
           <q-route-tab :to="{ name: 'admin-ujian' }" label="Ujian" />
+          <q-route-tab>Sisa waktu : 90:00</q-route-tab>
           <!-- <q-route-tab :to="{ name: 'admin-login' }" label="Login" /> -->
           <!-- <q-route-tab :to="{ name: 'home' }" label="Logout" /> -->
           <!-- <q-btn
@@ -145,7 +146,7 @@ const doLogout = async () => {
               <q-item-section avatar>
                 <q-icon name="logout" />
               </q-item-section>
-              <q-item-section> Logout </q-item-section>
+              <q-item-section> LOGOUT </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -184,7 +185,6 @@ const doLogout = async () => {
                 <q-item-label caption lines="2">Akhiri Sesi ujian</q-item-label>
               </q-item-section>
               <q-item-section side top>
-                <!-- <q-item-label caption>5 min ago</q-item-label> -->
                 <q-icon name="star" color="yellow" />
               </q-item-section>
             </q-item>
