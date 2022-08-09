@@ -8,7 +8,7 @@ const AdminRoutes = [
     component: () => import("@/layouts/AdminLayout.vue"),
     redirect: `${prefix}/home`,
     meta: {
-      requiresAuth: true,
+      requireAuth: true,
       title: "Admin",
       icon: "mdi-home",
       breadcrumb: {
@@ -80,13 +80,13 @@ const AdminRoutes = [
       },
       {
         path: `${prefix}/ujian/:id?/proses/:soal_id?`,
-        name: "Proses Ujian",
+        name: "admin-ujian-proses",
         component: () => import("@/views/admin/ujian/examples/UjianProses.vue"),
         meta: {
           title: "Ujian",
           icon: "mdi-home",
           breadcrumb: {
-            name: "admin-ujian-proses",
+            name: "Proses Ujian",
             path: `${prefix}/ujian/:id?/proses/:soal_id?`,
             goto: "admin-ujian-proses",
             params: {

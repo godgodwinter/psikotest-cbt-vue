@@ -1,7 +1,17 @@
 <script setup>
 import { ref } from "vue";
+import API from "@/services/authServices";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const username = ref("");
 const password = ref("");
+const onSubmit = async () => {
+  // console.log(username.value, password.value);
+  const res = await API.doLogin(username.value, password.value);
+  if (res === true) {
+    router.push({ name: "AdminLayout" });
+  }
+};
 </script>
 <template>
   <div class="row justify-center">
@@ -21,6 +31,7 @@ const password = ref("");
             lazy-rules
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
+              (val) => val.length > 2 || 'Min 3 Character',
             ]"
           />
 
@@ -33,6 +44,7 @@ const password = ref("");
             :rules="[
               (val) =>
                 (val !== null && val !== '') || 'Please type your password',
+              (val) => val.length > 2 || 'Min 3 Character',
             ]"
           />
 

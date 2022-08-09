@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+import API from "@/services/authServices";
 const router = useRouter();
 const $q = useQuasar();
 const menuList = [
@@ -35,28 +36,21 @@ const menuList = [
     separator: false,
     link: "admin-about",
   },
-  {
-    icon: "logout",
-    iconColor: "primary",
-    label: "Logout",
-    separator: false,
-    link: "home",
-  },
 ];
 
 // get status
-console.log($q.dark.isActive); // true, false
+// console.log($q.dark.isActive); // true, false
 
 // get configured status
-console.log($q.dark.mode); // "auto", true, false
+// console.log($q.dark.mode); // "auto", true, false
 
 // set status
 $q.dark.set(false); // or false or "auto"
 
-const onToggleThema = () => {
-  $q.dark.toggle();
-  console.log($q.dark.mode);
-};
+// const onToggleThema = () => {
+//   $q.dark.toggle();
+//   // console.log($q.dark.mode);
+// };
 
 const leftDrawerOpen = ref(false);
 const rightDrawerOpen = ref(false);
@@ -77,6 +71,13 @@ const doSoal = (id) => {
     name: "admin-ujian-proses",
     params: { id: 1, soal_id: id },
   });
+};
+
+const doLogout = async () => {
+  const res = await API.doLogout();
+  if (res === true) {
+    router.push({ name: "login" });
+  }
 };
 </script>
 
@@ -135,6 +136,17 @@ const doSoal = (id) => {
               </q-item>
               <q-separator :key="'sep' + index" v-if="menuItem.separator" />
             </template>
+            <q-item
+              clickable
+              :active="'active' === 'Outbox'"
+              v-ripple
+              @click="doLogout()"
+            >
+              <q-item-section avatar>
+                <q-icon name="logout" />
+              </q-item-section>
+              <q-item-section> Logout </q-item-section>
+            </q-item>
           </q-list>
         </q-scroll-area>
       </q-drawer>

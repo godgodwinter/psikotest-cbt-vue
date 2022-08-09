@@ -1,12 +1,12 @@
 <script setup>
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
-import { ref } from "vue";
+// import { ref } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
-const id = route.params.id;
+// const id = route.params.id;
 const soal_id = route.params.soal_id;
-const lorem =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+// const lorem =
+//   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 </script>
 
 <template>

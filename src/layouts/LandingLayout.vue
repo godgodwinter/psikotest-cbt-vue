@@ -1,21 +1,21 @@
 <script setup>
-import { ref } from "vue";
+// import { ref } from "vue";
 import { useQuasar } from "quasar";
 
 const $q = useQuasar();
 
 // get status
-console.log($q.dark.isActive); // true, false
+// console.log($q.dark.isActive); // true, false
 
 // get configured status
-console.log($q.dark.mode); // "auto", true, false
+// console.log($q.dark.mode); // "auto", true, false
 
 // set status
 $q.dark.set(false); // or false or "auto"
 
 const onToggleThema = () => {
   $q.dark.toggle();
-  console.log($q.dark.mode);
+  // console.log($q.dark.mode);
 };
 
 // const leftDrawerOpen = ref(false);

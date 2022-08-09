@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.15.0",
+    "axios": "^0.27.2",
+    "jwt-decode": "^3.1.2",
+    "mosha-vue-toastify": "^1.0.23",
     "pinia": "^2.0.16",
     "quasar": "^2.7.5",
     "vue": "^3.2.37",
