@@ -30,7 +30,7 @@ const onMulaiUjian = (soal_id = 0) => {
   </div> -->
   <!-- <q-space /> -->
   <div class="q-pa-md">
-    <h5>KATEGORI : {{ id }}</h5>
+    <h5>KATEGORI : {{ kategori_id }}</h5>
   </div>
   <div class="q-pa-md row items-start q-gutter-md">
     <q-card flat bordered style="width: 100%">

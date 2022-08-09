@@ -1,23 +1,23 @@
 <script setup>
-import { ref } from "vue";
-const leftDrawerOpen = ref(false);
-const rightDrawerOpen = ref(true);
+// import { ref } from "vue";
+// const leftDrawerOpen = ref(false);
+// const rightDrawerOpen = ref(true);
 
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-};
+// const toggleLeftDrawer = () => {
+//   leftDrawerOpen.value = !leftDrawerOpen.value;
+// };
 
-const toggleRightDrawer = () => {
-  rightDrawerOpen.value = !rightDrawerOpen.value;
-};
+// const toggleRightDrawer = () => {
+//   rightDrawerOpen.value = !rightDrawerOpen.value;
+// };
 
-const timeWithSeconds = ref("00:90:00");
+// const timeWithSeconds = ref("00:90:00");
 </script>
 <template>
   <div class="q-pa-md">
     <h5>Dashboard</h5>
   </div>
-  <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+  <!-- <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
     <q-scroll-area class="fit">
       <q-list>
         <q-item clickable v-ripple class="q-pb-xs">
@@ -55,5 +55,5 @@ const timeWithSeconds = ref("00:90:00");
         </q-item>
       </q-list>
     </q-scroll-area>
-  </q-drawer>
+  </q-drawer> -->
 </template>

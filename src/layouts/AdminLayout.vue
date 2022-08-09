@@ -68,8 +68,8 @@ const timeWithSeconds = ref("00:90:00");
 const doSoal = (id) => {
   console.log(id);
   router.push({
-    name: "admin-ujian-proses",
-    params: { id: 1, soal_id: id },
+    name: "admin-ujian-detail-proses",
+    params: { id: 1, kategori_id: 5, soal_id: id },
   });
 };
 
