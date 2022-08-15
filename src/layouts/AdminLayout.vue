@@ -3,7 +3,21 @@ import { ref } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 import API from "@/services/authServices";
+import apiUjian from "@/services/api/apiUjian";
+import Toast from "../components/lib/Toast";
 const router = useRouter();
+
+const doPeriksa = async () => {
+  const res = await apiUjian.doPeriksaUjianSaya();
+  if (res.success) {
+    Toast.babeng("Info", "Ujian Aktif ditemukan !");
+  } else {
+    Toast.babeng("Info", "Ujian aktif tidak ditemukan!");
+    apiUjian.doGetUjianList();
+  }
+};
+doPeriksa();
+
 const $q = useQuasar();
 const menuList = [
   {

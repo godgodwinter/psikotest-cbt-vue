@@ -8,7 +8,7 @@ const doLogin = async (username, password) => {
   try {
     const response = await Api.post("siswa/auth/login", {
       email: username,
-      password,
+      password: password,
     });
     console.log(response);
     if (response.code === 200) {
