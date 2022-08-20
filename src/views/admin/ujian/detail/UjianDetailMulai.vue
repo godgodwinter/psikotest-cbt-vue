@@ -1,4 +1,7 @@
 <script setup>
+import Api from "@/axios/axios";
+import { ref } from "vue";
+import Toast from "@/components/lib/Toast";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
@@ -6,11 +9,35 @@ const router = useRouter();
 const id = route.params.id;
 const kategori_id = route.params.kategori_id;
 const onMulaiUjian = (soal_id = 0) => {
-  router.push({
-    name: "admin-ujian-detail-proses",
-    params: { id, kategori_id, soal_id },
-  });
+  if (confirm("Apakah anda yakin memulai ujian ini?")) {
+    // post fungsi mulai ujian
+    // jika berhasil redirect
+
+    // jika gagal toast error
+    router.push({
+      name: "admin-ujian-detail-proses",
+      params: { id, kategori_id, soal_id },
+    });
+  };
 };
+const dataAsli = ref([]);
+const getDataId = async () => {
+  try {
+    const response = await Api.get(
+      `siswa/data/ujian/${id}/kategori_soal_detail/${kategori_id}`
+    );
+    if (response.success) {
+      dataAsli.value = response.data;
+    } else {
+      // console.log('Belum Daftar');
+      Toast.danger('Anda belum mendaftar untuk ujian ini');
+    }
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+getDataId();
 </script>
 
 <template>
@@ -30,7 +57,7 @@ const onMulaiUjian = (soal_id = 0) => {
   </div> -->
   <!-- <q-space /> -->
   <div class="q-pa-md">
-    <h5>KATEGORI : {{ kategori_id }}</h5>
+    <h5>KATEGORI : {{ dataAsli.nama }}</h5>
   </div>
   <div class="q-pa-md row items-start q-gutter-md">
     <q-card flat bordered style="width: 100%">
@@ -39,18 +66,53 @@ const onMulaiUjian = (soal_id = 0) => {
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        Pastikan identitas anda telah sesuai.
       </q-card-section>
 
       <q-separator inset />
 
-      <q-card-section>
+      <!-- <q-card-section>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
+      </q-card-section> -->
+    </q-card>
+  </div>
+
+
+  <div class="q-pa-md row items-start q-gutter-md" v-if="dataAsli.instruksi_status == 'Aktif'">
+    <q-card flat bordered style="width: 100%">
+      <q-card-section>
+        <div class="text-h6">Instruksi</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        {{ dataAsli.instruksi }}
       </q-card-section>
     </q-card>
   </div>
+
+  <div class="q-pa-md row items-start q-gutter-md" v-if="dataAsli.lembar_prasoal_status == 'Aktif'">
+    <q-card flat bordered style="width: 100%">
+      <q-card-section>
+        <div class="text-h6">Lembar Prasoal</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        {{ dataAsli.lembar_prasoal }}
+      </q-card-section>
+    </q-card>
+  </div>
+
+  <div class="q-pa-md row items-start q-gutter-md" v-if="dataAsli.instruksi_pengerjaan_status == 'Aktif'">
+    <q-card flat bordered style="width: 100%">
+      <q-card-section>
+        <div class="text-h6">Instruksi Pengerjaan</div>
+      </q-card-section>
+      <q-card-section class="q-pt-none">
+        {{ dataAsli.instruksi_pengerjaan }}
+      </q-card-section>
+    </q-card>
+  </div>
+
+
   <div class="q-pa-md row items-start q-gutter-md">
     <q-card flat bordered style="width: 100%">
       <q-card-section>
@@ -64,12 +126,7 @@ const onMulaiUjian = (soal_id = 0) => {
     </q-card>
   </div>
   <div style="width: 100%" class="row justify-end q-pa-md">
-    <q-btn
-      color="primary"
-      icon="check"
-      label="MULAI UJIAN"
-      @click="onMulaiUjian()"
-    />
+    <q-btn color="primary" icon="check" label="MULAI UJIAN" @click="onMulaiUjian()" />
   </div>
 </template>
 
