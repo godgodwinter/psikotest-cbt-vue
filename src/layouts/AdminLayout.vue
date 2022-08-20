@@ -80,7 +80,7 @@ const toggleRightDrawer = () => {
 const timeWithSeconds = ref("00:90:00");
 
 const doSoal = (id) => {
-  console.log(id);
+  // console.log(id);
   router.push({
     name: "admin-ujian-detail-proses",
     params: { id: 1, kategori_id: 5, soal_id: id },
@@ -136,12 +136,7 @@ const doLogout = async () => {
         <q-scroll-area class="fit">
           <q-list>
             <template v-for="(menuItem, index) in menuList" :key="index">
-              <q-item
-                clickable
-                :to="{ name: menuItem.link }"
-                :active="menuItem.label === 'Outbox'"
-                v-ripple
-              >
+              <q-item clickable :to="{ name: menuItem.link }" :active="menuItem.label === 'Outbox'" v-ripple>
                 <q-item-section avatar>
                   <q-icon :name="menuItem.icon" />
                 </q-item-section>
@@ -151,12 +146,7 @@ const doLogout = async () => {
               </q-item>
               <q-separator :key="'sep' + index" v-if="menuItem.separator" />
             </template>
-            <q-item
-              clickable
-              :active="'active' === 'Outbox'"
-              v-ripple
-              @click="doLogout()"
-            >
+            <q-item clickable :active="'active' === 'Outbox'" v-ripple @click="doLogout()">
               <q-item-section avatar>
                 <q-icon name="logout" />
               </q-item-section>
@@ -180,13 +170,7 @@ const doLogout = async () => {
               <div class="q-pa-md" style="max-width: 500px">
                 <p class="q-mt-md">Soal :</p>
                 <div class="q-gutter-sm">
-                  <q-btn
-                    color="teal"
-                    v-for="n in 50"
-                    :key="`sm-${n}`"
-                    :label="n"
-                    @click="doSoal(n)"
-                  />
+                  <q-btn color="teal" v-for="n in 50" :key="`sm-${n}`" :label="n" @click="doSoal(n)" />
                 </div>
               </div>
             </q-item>

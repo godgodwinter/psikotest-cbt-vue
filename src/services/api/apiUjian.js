@@ -38,7 +38,7 @@ const doGetUjianList = async () => {
     const { data, success } = response;
     if (success) {
       storeUjian.setUjianList(data);
-      console.log(data);
+      // console.log(data);
     }
     // console.log(data, message, success);
     return true;

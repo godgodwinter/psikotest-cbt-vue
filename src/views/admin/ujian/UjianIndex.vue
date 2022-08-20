@@ -1,6 +1,7 @@
 <script setup>
+import { ref } from "vue";
+import Api from "@/axios/axios";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
-// import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const columns = [
@@ -48,6 +49,27 @@ const columns = [
   },
 ];
 
+const dataAsli = ref([]);
+const getData = async (kelas_id) => {
+  try {
+    const response = await Api.get(
+      `siswa/data/ujian`
+    );
+    dataAsli.value = response.data;
+
+    rows.value = rows.value.concat(dataAsli.value.slice(0).map((r) => ({ ...r })));
+    // }
+    rows.value.forEach((row, index) => {
+      row.index = index + 1;
+    });
+
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+getData();
 const seed = [
   {
     nama: "Paket Ujian 1",
@@ -63,13 +85,13 @@ const seed = [
   },
 ];
 
-let rows = [];
+let rows = ref([]);
 // for (let i = 0; i < 1000; i++) {
-rows = rows.concat(seed.slice(0).map((r) => ({ ...r })));
-// }
-rows.forEach((row, index) => {
-  row.index = index + 1;
-});
+// rows = rows.concat(seed.slice(0).map((r) => ({ ...r })));
+// // }
+// rows.forEach((row, index) => {
+//   row.index = index + 1;
+// });
 
 const doDetail = (id) => {
   // console.log(id);
@@ -85,25 +107,15 @@ const doDetail = (id) => {
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn
-                  round
-                  @click="doDetail(props.row.index)"
-                  icon="not_started"
-                  color="teal"
-                >
-                  <q-tooltip> Detail {{ props.row.index }} </q-tooltip></q-btn
-                >
+                <q-btn round @click="doDetail(props.row.index)" icon="not_started" color="teal">
+                  <q-tooltip> Detail {{ props.row.index }} </q-tooltip>
+                </q-btn>
               </div>
             </div>
             <div v-else>{{ col.value }}</div>
           </q-td>
         </q-tr>
-        <q-tr
-          v-show="props.expand"
-          :props="props"
-          :key="`e_${props.row.index}`"
-          class="q-virtual-scroll--with-prev"
-        >
+        <q-tr v-show="props.expand" :props="props" :key="`e_${props.row.index}`" class="q-virtual-scroll--with-prev">
           <q-td colspan="100%">
             <div class="text-left">
               This is expand slot for row above: {{ props.row.name }} (Index:
