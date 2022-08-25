@@ -1,8 +1,39 @@
 <script setup>
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
+import ApiUjianProses from "@/services/api/apiUjianProses";
+import Toast from "@/components/lib/Toast";
 // import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useStoreUjian } from "@/stores/ujian";
+const storeUjian = useStoreUjian();
 const route = useRoute();
+const router = useRouter();
+const id = route.params.id;
+const kategori_id = route.params.kategori_id;
+const kategori_proses = route.params.kategori_proses;
+storeUjian.$subscribe((mutation, state) => {
+});
+
+// periksa 
+// a. apakah sudah terdaftar ujian ini,,
+// b. sisa waktu apakah masi ada
+
+// jika lolos periksa
+// 1. get all soal with pilihan jawaban and jawaban_ku ? jika ada
+const getDataSoal = async () => {
+  // post fungsi mulai ujian
+  // jika berhasil redirect
+  const resMulaiUjian = await ApiUjianProses.doGetSoal(id, kategori_id, kategori_proses);
+  // jika gagal toast error
+  if (resMulaiUjian) {
+    Toast.babeng("Info", "Berhasil memuat soal ujian")
+  } else {
+    Toast.danger("Info", "Gagal memuat soal ujian")
+  }
+};
+getDataSoal();
+// 2. save to local storage
+// 3. go to last read
 // const id = route.params.id;
 const soal_id = route.params.soal_id;
 // const lorem =
@@ -13,22 +44,10 @@ const soal_id = route.params.soal_id;
   <BreadCrumb />
   <div class="q-pa-md q-gutter-md">
     <div>
-      <q-chip
-        size="18px"
-        icon="bookmark"
-        dense
-        color="secondary"
-        text-color="white"
-      >
+      <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
         NO SOAL : {{ parseInt(soal_id) + 1 }}
       </q-chip>
-      <q-chip
-        size="18px"
-        icon="bookmark"
-        dense
-        color="deep-orange"
-        text-color="white"
-      >
+      <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
         STATUS : BELUM DIJAWAB
       </q-chip>
     </div>

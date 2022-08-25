@@ -4,20 +4,46 @@ import { ref } from "vue";
 import Toast from "@/components/lib/Toast";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRoute, useRouter } from "vue-router";
+import ApiUjianProses from "@/services/api/apiUjianProses";
+import ApiUjian from "@/services/api/apiUjian";
+import { useStoreUjian } from "@/stores/ujian";
+const storeUjian = useStoreUjian();
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 const kategori_id = route.params.kategori_id;
-const onMulaiUjian = (soal_id = 0) => {
+const getUjianAktif = async () => {
+  // 1. load ujian aktif
+
+  const resGetUjianAktif = await ApiUjian.doPeriksaUjianSaya();
+  // 2. jika berhail load get Data then redirect
+  if (resGetUjianAktif) {
+    router.push({
+      name: "admin-ujian-detail-proses",
+      params: {
+        id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
+        kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
+        kategori_proses: storeUjian.getUjianAktif.id
+      },
+    });
+
+  } else {
+    Toast.danger('Info', 'Gagal memuat ujian aktif')
+  }
+}
+const onMulaiUjian = async () => {
   if (confirm("Apakah anda yakin memulai ujian ini?")) {
     // post fungsi mulai ujian
     // jika berhasil redirect
-
+    const resMulaiUjian = await ApiUjianProses.doMulaiUjian(id, kategori_id);
     // jika gagal toast error
-    router.push({
-      name: "admin-ujian-detail-proses",
-      params: { id, kategori_id, soal_id },
-    });
+    if (resMulaiUjian) {
+      Toast.babeng("Info", "Berhasil memulai ujian")
+
+      getUjianAktif();
+    } else {
+      Toast.danger("Info", "Gagal memulai ujian")
+    }
   };
 };
 const dataAsli = ref([]);

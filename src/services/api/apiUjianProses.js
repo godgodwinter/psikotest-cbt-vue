@@ -8,23 +8,15 @@ const storeAuth = useStoreAuth();
 
 const token = storeAuth.getToken;
 
-const doPeriksaUjianSaya = async () => {
+const doMulaiUjian = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id) => {
   try {
-    const response = await Api.get(`siswa/data/periksa/ujianaktif`, {
+    const response = await Api.post(`siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/mulai_ujian`, {
       token: token,
     });
     const { data, success } = response;
-    // console.log('====================================');
-    // console.log(data);
-    // console.log('====================================');
     if (success) {
-      storeUjian.setIsUjianAktif(true);
-      storeUjian.setUjianAktif(data);
       return true;
     }
-    storeUjian.setIsUjianAktif(false);
-    storeUjian.setUjianAktif(data);
-    // console.log(data, message, success);
     return false;
   } catch (error) {
     Toast.danger("Error", `Gagal menghubungkan ke Server!`);
@@ -33,18 +25,18 @@ const doPeriksaUjianSaya = async () => {
   }
 };
 
-const doGetUjianList = async () => {
+const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, ujian_proses_kategori_id) => {
   try {
-    const response = await Api.get(`siswa/data/ujian`, {
-      token,
+    const response = await Api.post(`siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/getsoal/${ujian_proses_kategori_id}`, {
+      token: token,
     });
     const { data, success } = response;
     if (success) {
-      storeUjian.setUjianList(data);
-      // console.log(data);
+      console.log('====================================');
+      console.log(data, 'aa');
+      console.log('====================================');
     }
-    // console.log(data, message, success);
-    return true;
+    return false;
   } catch (error) {
     Toast.danger("Error", `Gagal menghubungkan ke Server!`);
     console.error(error);
@@ -52,8 +44,9 @@ const doGetUjianList = async () => {
   }
 };
 
-const apiUjian = {
-  doPeriksaUjianSaya,
-  doGetUjianList,
+
+const apiUjianProses = {
+  doMulaiUjian,
+  doGetSoal,
 };
-export default apiUjian;
+export default apiUjianProses;

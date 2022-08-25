@@ -123,10 +123,10 @@ const AdminRoutes = [
                 },
               },
               {
-                path: `${prefix}/ujian/:id/detail/:kategori_id/proses/:soal_id`,
+                path: `${prefix}/ujian/:id/detail/:kategori_id/proses/:kategori_proses/soal/:no_soal?`,
                 name: "admin-ujian-detail-proses",
                 component: () =>
-                  import("@/views/admin/ujian/examples/UjianProses.vue"),
+                  import("@/views/admin/ujian/detail/UjianDetailProses.vue"),
                 meta: {
                   title: "Ujian",
                   icon: "mdi-home",

@@ -5,12 +5,48 @@ import { useRouter } from "vue-router";
 import API from "@/services/authServices";
 import apiUjian from "@/services/api/apiUjian";
 import Toast from "../components/lib/Toast";
+import { useStoreUjian } from "@/stores/ujian";
+import moment from "moment/min/moment-with-locales";
+import localization from "moment/locale/id";
+moment.updateLocale("id", localization);
+const storeUjian = useStoreUjian();
 const router = useRouter();
+const timeWithSeconds = ref("-");
+storeUjian.$subscribe((mutation, state) => {
+  if (storeUjian.getUjianAktif) {
+    console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
+    if (Number.isInteger(storeUjian.getUjianAktif.sisa_waktu)) {
+      fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+    }
+  }
+});
 
+const fnTimerInterval = (second) => {
+  // setInterval(function () {
+  //   timeWithSeconds.value = fnTimer(second);
+  // }, 1000)
+  let tes = setInterval(() => {
+    // console.log(fnTimer(second));
+    timeWithSeconds.value = fnTimer(second);
+    if (second === 0) {
+      Toast.babeng('Info', "Waktu Habis!")
+      clearInterval(tes)
+    } else {
+      second--
+    }
+  }, 1000)
+  // console.log(tes);
+}
+
+const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
-  if (res.success) {
+  if (res) {
     Toast.babeng("Info", "Ujian Aktif ditemukan !");
+    console.log('====================================');
+    // console.log(storeUjian.getUjianAktif);
+    console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id, storeUjian.getUjianAktif.ujian_paketsoal_kategori_id, storeUjian.getUjianAktif.id);
+    console.log('====================================');
   } else {
     Toast.babeng("Info", "Ujian aktif tidak ditemukan!");
     apiUjian.doGetUjianList();
@@ -77,7 +113,6 @@ const toggleRightDrawer = () => {
   rightDrawerOpen.value = !rightDrawerOpen.value;
 };
 
-const timeWithSeconds = ref("00:90:00");
 
 const doSoal = (id) => {
   // console.log(id);
