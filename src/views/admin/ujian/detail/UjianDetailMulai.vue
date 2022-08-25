@@ -32,6 +32,7 @@ const getUjianAktif = async () => {
   }
 }
 const onMulaiUjian = async () => {
+  storeUjian.setSoalList([]);
   if (confirm("Apakah anda yakin memulai ujian ini?")) {
     // post fungsi mulai ujian
     // jika berhasil redirect

@@ -203,9 +203,20 @@ const doMulai = (kategori_id) => {
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn round @click="doMulai(props.row.index)" icon="not_started" color="teal">
-                  <q-tooltip> Mulai {{ props.row.index }} </q-tooltip>
+                <q-btn round @click="doMulai(props.row.index)" icon="not_started" color="teal"
+                  v-if="props.row.status == 'Belum'">
+                  <q-tooltip> Mulai </q-tooltip>
                 </q-btn>
+                <q-btn round color="red" v-else icon="not_started">
+                  <q-tooltip> Selesai </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+            <div v-if="col.name == 'status'">
+              <div class="q-pa-xs q-gutter-sm">
+                <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.index)"
+                  v-if="props.row.status == 'Belum'" />
+                <q-btn color="red" text-color="white" :label="props.row.status" v-else />
               </div>
             </div>
             <div v-else>{{ col.value }}</div>

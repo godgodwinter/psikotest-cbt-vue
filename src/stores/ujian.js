@@ -15,7 +15,8 @@ export const useStoreUjian = defineStore({
     ujianListKategori: [], // sudah daftar ujian utama
     //get data soal dan pilihan jawaban from LocalStorage jika ada jika tidak ada ambil dari server kemudian simpan  ke local storage
     //where ujian aktif
-    soalList: [],
+    soalList: localStorage.getItem("soal") ? JSON.parse(localStorage.getItem("soal")) : [],
+    soalAktif: localStorage.getItem("soalAktif") ? localStorage.getItem("soalAktif") : 0,
   }),
   getters: {
     getIsUjianAktif: (state) => state.isUjianAktif,
@@ -23,6 +24,7 @@ export const useStoreUjian = defineStore({
     getUjianList: (state) => state.ujianList,
     getUjianListKategori: (state) => state.ujianListKategori,
     getSoalList: (state) => state.soalList,
+    getSoalAktif: (state) => state.soalAktif,
   },
   actions: {
     setIsUjianAktif(isUjianAktif) {
@@ -39,6 +41,9 @@ export const useStoreUjian = defineStore({
     },
     setSoalList(soalList) {
       this.soalList = soalList;
+    },
+    setSoalAktif(soalAktif) {
+      this.soalAktif = soalAktif;
     },
   },
 });

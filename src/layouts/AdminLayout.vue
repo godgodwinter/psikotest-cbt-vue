@@ -17,6 +17,10 @@ storeUjian.$subscribe((mutation, state) => {
     console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
     if (Number.isInteger(storeUjian.getUjianAktif.sisa_waktu)) {
       fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+    } else {
+      // Toast.danger("Info", "Paket Soal tidak ditemukan!")
+      localStorage.removeItem("soal");
+      localStorage.removeItem("soalAktif");
     }
   }
 });
@@ -48,7 +52,7 @@ const doPeriksa = async () => {
     console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id, storeUjian.getUjianAktif.ujian_paketsoal_kategori_id, storeUjian.getUjianAktif.id);
     console.log('====================================');
   } else {
-    Toast.babeng("Info", "Ujian aktif tidak ditemukan!");
+    // Toast.babeng("Info", "Ujian aktif tidak ditemukan!");
     apiUjian.doGetUjianList();
   }
 };

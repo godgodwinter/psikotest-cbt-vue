@@ -1,10 +1,13 @@
 <script setup>
+import { ref } from "vue"
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import ApiUjianProses from "@/services/api/apiUjianProses";
 import Toast from "@/components/lib/Toast";
 // import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStoreUjian } from "@/stores/ujian";
+import { computed } from "@vue/reactivity";
+import Fungsi from "@/components/lib/FungsiCampur"
 const storeUjian = useStoreUjian();
 const route = useRoute();
 const router = useRouter();
@@ -12,6 +15,7 @@ const id = route.params.id;
 const kategori_id = route.params.kategori_id;
 const kategori_proses = route.params.kategori_proses;
 storeUjian.$subscribe((mutation, state) => {
+  soal.value = dataSoal.value[dataSoalAktif.value];
 });
 
 // periksa 
@@ -20,6 +24,9 @@ storeUjian.$subscribe((mutation, state) => {
 
 // jika lolos periksa
 // 1. get all soal with pilihan jawaban and jawaban_ku ? jika ada
+const dataSoal = computed(() => storeUjian.getSoalList);
+const dataSoalAktif = computed(() => storeUjian.getSoalAktif);
+const soal = ref({});
 const getDataSoal = async () => {
   // post fungsi mulai ujian
   // jika berhasil redirect
@@ -28,16 +35,24 @@ const getDataSoal = async () => {
   if (resMulaiUjian) {
     Toast.babeng("Info", "Berhasil memuat soal ujian")
   } else {
-    Toast.danger("Info", "Gagal memuat soal ujian")
+    Toast.danger("Info", "Gagal memuat soal ujian 2")
+    localStorage.removeItem("soal");
+    localStorage.removeItem("soalAktif");
   }
 };
-getDataSoal();
+if (dataSoal.value.length < 1) {
+  getDataSoal();
+}
 // 2. save to local storage
 // 3. go to last read
 // const id = route.params.id;
 const soal_id = route.params.soal_id;
 // const lorem =
 //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+// dataSoal filter where index
+
+
+
 </script>
 
 <template>
@@ -45,10 +60,12 @@ const soal_id = route.params.soal_id;
   <div class="q-pa-md q-gutter-md">
     <div>
       <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
-        NO SOAL : {{ parseInt(soal_id) + 1 }}
+        NO SOAL : {{ parseInt(dataSoalAktif) + 1 }}
       </q-chip>
       <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
-        STATUS : BELUM DIJAWAB
+        STATUS : {{ dataSoal.length }} SOAL BELUM DIJAWAB
+        <!-- {{ dataSoal.length }} -
+        {{ dataSoal }} -->
       </q-chip>
     </div>
   </div>
@@ -59,8 +76,8 @@ const soal_id = route.params.soal_id;
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        {{ soal.pertanyaan }}
+        {{ soal.jawaban_ku }}
       </q-card-section>
 
       <q-separator inset />
@@ -69,6 +86,7 @@ const soal_id = route.params.soal_id;
         <div class="q-pa-md">
           <div class="q-col-gutter-md row items-start">
             <div class="col-6">
+
               <!-- <q-img
                 src="https://cdn.quasar.dev/img/image-src.png"
                 srcset="https://cdn.quasar.dev/img/image-1x.png 400w,
@@ -110,40 +128,16 @@ const soal_id = route.params.soal_id;
   </div>
   <div class="q-pa-md">
     <q-list bordered class="q-pa-md">
-      <q-item clickable v-ripple class="bg-teal-5 text-white">
+      <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
+      <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban">
         <q-card-section>
-          <div class="text-h6">A</div>
+          <div class="text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}</div>
         </q-card-section>
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus,
-          ipsam! Modi voluptatibus nam aut fugiat qui expedita quo laborum
-          eveniet, maiores ducimus, dolores dignissimos delectus earum
-          temporibus fuga. Voluptatibus, suscipit.
+        <q-card-section class="q-pt-md bi-align-bottom">
+          {{ item.jawaban }}
         </q-card-section>
       </q-item>
-      <q-item clickable v-ripple>
-        <q-card-section>
-          <div class="text-h6">B</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus,
-          ipsam! Modi voluptatibus nam aut fugiat qui expedita quo laborum
-          eveniet, maiores ducimus, dolores dignissimos delectus earum
-          temporibus fuga. Voluptatibus, suscipit.
-        </q-card-section>
-      </q-item>
-      <q-item clickable v-ripple>
-        <q-card-section>
-          <div class="text-h6">C</div>
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus,
-          ipsam! Modi voluptatibus nam aut fugiat qui expedita quo laborum
-          eveniet, maiores ducimus, dolores dignissimos delectus earum
-          temporibus fuga. Voluptatibus, suscipit.
-        </q-card-section>
-      </q-item>
-      <q-item clickable v-ripple>
+      <!-- <q-item clickable v-ripple>
         <q-card-section>
           <div class="text-h6">D</div>
         </q-card-section>
@@ -153,7 +147,7 @@ const soal_id = route.params.soal_id;
           eveniet, maiores ducimus, dolores dignissimos delectus earum
           temporibus fuga. Voluptatibus, suscipit.
         </q-card-section>
-      </q-item>
+      </q-item> -->
     </q-list>
   </div>
 

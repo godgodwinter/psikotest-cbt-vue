@@ -3,6 +3,7 @@ import Api from "@/axios/axios";
 import Toast from "@/components/lib/Toast.js";
 import { useStoreUjian } from "@/stores/ujian";
 import { useStoreAuth } from "@/stores/auth";
+import { LocalStorage } from "quasar";
 const storeUjian = useStoreUjian();
 const storeAuth = useStoreAuth();
 
@@ -32,9 +33,16 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
     });
     const { data, success } = response;
     if (success) {
-      console.log('====================================');
-      console.log(data, 'aa');
-      console.log('====================================');
+      // save data to local storage
+      localStorage.setItem('soal', JSON.stringify(data));
+      storeUjian.setSoalList(data);
+      localStorage.setItem('soalAktif', JSON.stringify(0));
+      storeUjian.setSoalAktif(0);
+
+
+
+
+      return true;
     }
     return false;
   } catch (error) {
