@@ -11,12 +11,20 @@ import Fungsi from "@/components/lib/FungsiCampur"
 const storeUjian = useStoreUjian();
 const route = useRoute();
 const router = useRouter();
-const id = route.params.id;
+const id = route.params.id ? route.params.id : null;
 const kategori_id = route.params.kategori_id;
 const kategori_proses = route.params.kategori_proses;
+const no_soal = route.params.no_soal ? route.params.no_soal : 1;
+
 storeUjian.$subscribe((mutation, state) => {
-  soal.value = dataSoal.value[dataSoalAktif.value];
+  // soal.value = dataSoal.value[dataSoalAktif.value];
+  // console.log(dataSoalAktif.value, soal.value);
+  if (soal.value == null) {
+    storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id ? id - 1 : 0]);
+  }
 });
+
+
 
 // periksa 
 // a. apakah sudah terdaftar ujian ini,,
@@ -26,7 +34,12 @@ storeUjian.$subscribe((mutation, state) => {
 // 1. get all soal with pilihan jawaban and jawaban_ku ? jika ada
 const dataSoal = computed(() => storeUjian.getSoalList);
 const dataSoalAktif = computed(() => storeUjian.getSoalAktif);
-const soal = ref({});
+const soal = computed(() => storeUjian.getSoalAktifDetail);
+// const soal = ref({});
+storeUjian.setSoalAktif(no_soal);
+// console.log(no_soal);
+localStorage.setItem("soalAktif", no_soal);
+
 const getDataSoal = async () => {
   // post fungsi mulai ujian
   // jika berhasil redirect
@@ -40,6 +53,7 @@ const getDataSoal = async () => {
     localStorage.removeItem("soalAktif");
   }
 };
+
 if (dataSoal.value.length < 1) {
   getDataSoal();
 }
@@ -60,7 +74,7 @@ const soal_id = route.params.soal_id;
   <div class="q-pa-md q-gutter-md">
     <div>
       <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
-        NO SOAL : {{ parseInt(dataSoalAktif) + 1 }}
+        NO SOAL : {{ parseInt(no_soal) }}
       </q-chip>
       <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
         STATUS : {{ dataSoal.length }} SOAL BELUM DIJAWAB
@@ -69,25 +83,26 @@ const soal_id = route.params.soal_id;
       </q-chip>
     </div>
   </div>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card flat bordered style="width: 100%">
-      <q-card-section>
-        <div class="text-h6">Pertanyaan</div>
-      </q-card-section>
+  <div v-if="soal">
+    <div class="q-pa-md row items-start q-gutter-md">
+      <q-card flat bordered style="width: 100%">
+        <q-card-section>
+          <div class="text-h6">Pertanyaan</div>
+        </q-card-section>
 
-      <q-card-section class="q-pt-none">
-        {{ soal.pertanyaan }}
-        {{ soal.jawaban_ku }}
-      </q-card-section>
+        <q-card-section class="q-pt-none">
+          {{ soal.pertanyaan }}
+          {{ soal.jawaban_ku }}
+        </q-card-section>
 
-      <q-separator inset />
+        <q-separator inset />
 
-      <q-card-section>
-        <div class="q-pa-md">
-          <div class="q-col-gutter-md row items-start">
-            <div class="col-6">
+        <q-card-section>
+          <div class="q-pa-md">
+            <div class="q-col-gutter-md row items-start">
+              <div class="col-6">
 
-              <!-- <q-img
+                <!-- <q-img
                 src="https://cdn.quasar.dev/img/image-src.png"
                 srcset="https://cdn.quasar.dev/img/image-1x.png 400w,
                 https://cdn.quasar.dev/img/image-2x.png 800w,
@@ -103,7 +118,7 @@ const soal_id = route.params.soal_id;
                   With srcset & sizes
                 </div>
               </q-img> -->
-              <!-- <q-img
+                <!-- <q-img
                 src="https://cdn.quasar.dev/img/parallax2.jpg"
                 srcset="https://cdn.quasar.dev/img/parallax2.jpg 400w,
                 https://cdn.quasar.dev/img/parallax2.jpg 800w,
@@ -120,24 +135,24 @@ const soal_id = route.params.soal_id;
                   Caption
                 </div>
               </q-img> -->
+              </div>
             </div>
           </div>
-        </div>
-      </q-card-section>
-    </q-card>
-  </div>
-  <div class="q-pa-md">
-    <q-list bordered class="q-pa-md">
-      <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
-      <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban">
-        <q-card-section>
-          <div class="text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}</div>
         </q-card-section>
-        <q-card-section class="q-pt-md bi-align-bottom">
-          {{ item.jawaban }}
-        </q-card-section>
-      </q-item>
-      <!-- <q-item clickable v-ripple>
+      </q-card>
+    </div>
+    <div class="q-pa-md">
+      <q-list bordered class="q-pa-md">
+        <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
+        <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban">
+          <q-card-section>
+            <div class="text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}</div>
+          </q-card-section>
+          <q-card-section class="q-pt-md bi-align-bottom">
+            {{ item.jawaban }}
+          </q-card-section>
+        </q-item>
+        <!-- <q-item clickable v-ripple>
         <q-card-section>
           <div class="text-h6">D</div>
         </q-card-section>
@@ -148,15 +163,16 @@ const soal_id = route.params.soal_id;
           temporibus fuga. Voluptatibus, suscipit.
         </q-card-section>
       </q-item> -->
-    </q-list>
-  </div>
+      </q-list>
+    </div>
 
-  <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-    <q-btn color="primary" icon="check" label="simpan" @click="doBack()" />
-  </div>
-  <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-    <q-btn color="green" icon="arrow_back_ios" @click="doBack()" />
-    <q-btn color="info" icon="arrow_forward_ios" @click="doNext()" />
+    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+      <q-btn color="primary" icon="check" label="simpan" @click="doBack()" />
+    </div>
+    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+      <q-btn color="green" icon="arrow_back_ios" @click="doBack()" />
+      <q-btn color="info" icon="arrow_forward_ios" @click="doNext()" />
+    </div>
   </div>
 </template>
 

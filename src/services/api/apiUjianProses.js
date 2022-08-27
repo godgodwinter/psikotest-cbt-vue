@@ -36,8 +36,12 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
       // save data to local storage
       localStorage.setItem('soal', JSON.stringify(data));
       storeUjian.setSoalList(data);
-      localStorage.setItem('soalAktif', JSON.stringify(0));
-      storeUjian.setSoalAktif(0);
+      if (localStorage.getItem('soalAktif')) {
+        console.log(localStorage.getItem('soalAktif'));
+      } else {
+        localStorage.setItem('soalAktif', JSON.stringify(0));
+        storeUjian.setSoalAktif(0);
+      }
 
 
 
@@ -46,7 +50,7 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
     }
     return false;
   } catch (error) {
-    Toast.danger("Error", `Gagal menghubungkan ke Server!`);
+    Toast.danger("Error", `Gagal menghubungkan ke Server 0!`);
     console.error(error);
     return false;
   }

@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import API from "@/services/authServices";
 import apiUjian from "@/services/api/apiUjian";
 import Toast from "../components/lib/Toast";
@@ -11,6 +11,13 @@ import localization from "moment/locale/id";
 moment.updateLocale("id", localization);
 const storeUjian = useStoreUjian();
 const router = useRouter();
+const route = useRoute();
+const soalList = computed(() => storeUjian.getSoalList);
+// const id = route.params.id ? router.params.id : null;
+// const kategori_id = route.params.kategori_id ? router.params.kategori_id : null;
+// const kategori_proses = route.params.kategori_proses ? router.params.kategori_proses : null;
+
+
 const timeWithSeconds = ref("-");
 storeUjian.$subscribe((mutation, state) => {
   if (storeUjian.getUjianAktif) {
@@ -20,6 +27,7 @@ storeUjian.$subscribe((mutation, state) => {
     } else {
       // Toast.danger("Info", "Paket Soal tidak ditemukan!")
       localStorage.removeItem("soal");
+
       localStorage.removeItem("soalAktif");
     }
   }
@@ -47,10 +55,12 @@ const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
   if (res) {
     Toast.babeng("Info", "Ujian Aktif ditemukan !");
-    console.log('====================================');
+    // soalList.value = storeUjian.getSoalList;
+    // console.log(storeUjian.getSoalList);
+    // console.log('====================================');
     // console.log(storeUjian.getUjianAktif);
-    console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id, storeUjian.getUjianAktif.ujian_paketsoal_kategori_id, storeUjian.getUjianAktif.id);
-    console.log('====================================');
+    // console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id, storeUjian.getUjianAktif.ujian_paketsoal_kategori_id, storeUjian.getUjianAktif.id);
+    // console.log('====================================');
   } else {
     // Toast.babeng("Info", "Ujian aktif tidak ditemukan!");
     apiUjian.doGetUjianList();
@@ -119,10 +129,18 @@ const toggleRightDrawer = () => {
 
 
 const doSoal = (id) => {
-  // console.log(id);
+  let no_soal_id = id + 1;
+  let getSoal = storeUjian.getSoalList[id];
+  storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id]);
+  // console.log(no_soal_id, getSoal);
   router.push({
     name: "admin-ujian-detail-proses",
-    params: { id: 1, kategori_id: 5, soal_id: id },
+    params: {
+      id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
+      kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
+      kategori_proses: storeUjian.getUjianAktif.id,
+      no_soal: no_soal_id
+    },
   });
 };
 
@@ -195,7 +213,7 @@ const doLogout = async () => {
         </q-scroll-area>
       </q-drawer>
 
-      <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+      <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered v-if="soalList">
         <q-scroll-area class="fit">
           <q-list>
             <q-item clickable v-ripple class="q-pb-xs">
@@ -209,9 +227,16 @@ const doLogout = async () => {
               <div class="q-pa-md" style="max-width: 500px">
                 <p class="q-mt-md">Soal :</p>
                 <div class="q-gutter-sm">
-                  <q-btn color="teal" v-for="n in 50" :key="`sm-${n}`" :label="n" @click="doSoal(n)" />
+                  <q-btn color="teal" v-for="n, index in soalList" :key="`sm-${n.id}`" :label="index + 1"
+                    @click="doSoal(index)" />
                 </div>
               </div>
+              <!-- <div class="q-pa-md" style="max-width: 500px">
+                <p class="q-mt-md">Soal :</p>
+                <div class="q-gutter-sm">
+                  <q-btn color="teal" v-for="n in 50" :key="`sm-${n}`" :label="n" @click="doSoal(n)" />
+                </div>
+              </div> -->
             </q-item>
             <q-item v-ripple clickable>
               <q-item-section top avatar>

@@ -17,6 +17,7 @@ export const useStoreUjian = defineStore({
     //where ujian aktif
     soalList: localStorage.getItem("soal") ? JSON.parse(localStorage.getItem("soal")) : [],
     soalAktif: localStorage.getItem("soalAktif") ? localStorage.getItem("soalAktif") : 0,
+    soalAktifDetail: null,
   }),
   getters: {
     getIsUjianAktif: (state) => state.isUjianAktif,
@@ -25,6 +26,7 @@ export const useStoreUjian = defineStore({
     getUjianListKategori: (state) => state.ujianListKategori,
     getSoalList: (state) => state.soalList,
     getSoalAktif: (state) => state.soalAktif,
+    getSoalAktifDetail: (state) => state.soalAktifDetail,
   },
   actions: {
     setIsUjianAktif(isUjianAktif) {
@@ -44,6 +46,9 @@ export const useStoreUjian = defineStore({
     },
     setSoalAktif(soalAktif) {
       this.soalAktif = soalAktif;
+    },
+    setSoalAktifDetail(soalAktifDetail) {
+      this.soalAktifDetail = soalAktifDetail;
     },
   },
 });
