@@ -19,9 +19,43 @@ const no_soal = route.params.no_soal ? route.params.no_soal : 1;
 storeUjian.$subscribe((mutation, state) => {
   // soal.value = dataSoal.value[dataSoalAktif.value];
   // console.log(dataSoalAktif.value, soal.value);
+  // jika load data tidak melalui sidebar
   if (soal.value == null) {
-    storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id ? id - 1 : 0]);
+    storeUjian.setSoalAktifDetail(storeUjian.getSoalList[parseInt(no_soal) - 1]);
+    if (storeUjian.getSoalAktif !==
+      localStorage.getItem("soalAktif", no_soal)) {
+      // console.log(storeUjian.getSoalList.length);
+      if (no_soal > storeUjian.getSoalList.length) {
+        localStorage.setItem("soalAktif", 1);
+      }
+    }
+    let getSoal = storeUjian.getSoalList[parseInt(no_soal) - 1];
+    let nomer = no_soal;
+    // console.log('a');
+    if (no_soal > storeUjian.getSoalList.length) {
+      // console.log('b');
+      storeUjian.setSoalAktifDetail(storeUjian.getSoalList[0]);
+      nomer = 1;
+      getSoal = storeUjian.getSoalList[0];
+    }
+
+    // console.log(getSoal, parseInt(nomer));
+    if (getSoal) {
+      let getJawabanKu = storeUjian.getSoalList[parseInt(nomer) - 1]?.pilihan_jawaban.filter((item) => {
+        if (item.kode_jawaban === storeUjian.getSoalList[parseInt(nomer) - 1].jawaban_ku)
+          return item
+      })
+      // console.log(getSoal.jawaban_ku, getJawabanKu.length);
+      if (getJawabanKu.length > 0) {
+        // console.log(getJawabanKu[0]);
+        storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
+        // console.log(storeUjian.getTempJawabanTerpilih);
+      }
+
+    }
   }
+
+  // console.log(soal.value.jawaban_ku);
 });
 
 
@@ -35,10 +69,18 @@ storeUjian.$subscribe((mutation, state) => {
 const dataSoal = computed(() => storeUjian.getSoalList);
 const dataSoalAktif = computed(() => storeUjian.getSoalAktif);
 const soal = computed(() => storeUjian.getSoalAktifDetail);
+const tempJawabanTerpilih = computed(() => storeUjian.getTempJawabanTerpilih);
+const doPilihJawaban = (item, index) => {
+  storeUjian.setTempJawabanTerpilih(item);
+  // console.log(item, index);
+}
 // const soal = ref({});
+
+// if (soal.value == null) {
+//   storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id ? id - 1 : 0]);
+// }
 storeUjian.setSoalAktif(no_soal);
 // console.log(no_soal);
-localStorage.setItem("soalAktif", no_soal);
 
 const getDataSoal = async () => {
   // post fungsi mulai ujian
@@ -66,6 +108,57 @@ const soal_id = route.params.soal_id;
 // dataSoal filter where index
 
 
+const doSimpan = () => {
+  // link:
+  // ujian_proses_kategori_id ==kategori_proses
+  //data :
+  // ujian_paketsoal_soal_id,kode_soal,ujian_paketsoal_soal_pilihanjawaban_id,kode_jawaban
+  if (tempJawabanTerpilih.value) {
+    // const resMulaiUjian = await ApiUjianProses.doInsertJawaban(kategori_proses, soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
+    console.log(kategori_proses);
+    console.log(soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
+  } else {
+    Toast.babeng('Jawaban Belum dipilih')
+  }
+}
+
+// console.log('====================================');
+// console.log(storeUjian.getSoalList.length);
+// console.log('====================================');
+if (no_soal > storeUjian.getSoalList.length) {
+  Toast.babeng('Soal tidak ditemukan');
+  storeUjian.setSoalAktifDetail(storeUjian.getSoalList[0]);
+  storeUjian.setSoalAktif(0);
+  storeUjian.setTempJawabanTerpilih(null);
+
+  let getSoal = storeUjian.getSoalList[0];
+  let getJawabanKu = storeUjian.getSoalList[0]?.pilihan_jawaban.filter((item) => {
+    if (item.kode_jawaban === storeUjian.getSoalList[0].jawaban_ku)
+      return item
+  })
+  if (getJawabanKu?.length > 0) {
+    // console.log(getJawabanKu[0]);
+    storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
+    // console.log(storeUjian.getTempJawabanTerpilih);
+  }
+  router.push({
+    name: "admin-ujian-detail-proses",
+    params: {
+      id,
+      kategori_id,
+      kategori_proses,
+      no_soal: 1,
+    },
+  });
+}
+// const getSoalBelumDijawab= ()=>{
+
+// }
+let soalBelumDiJawab = dataSoal.value.filter((item) => {
+  if (item.jawaban_ku == '-') {
+    return item;
+  }
+});
 
 </script>
 
@@ -74,10 +167,10 @@ const soal_id = route.params.soal_id;
   <div class="q-pa-md q-gutter-md">
     <div>
       <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
-        NO SOAL : {{ parseInt(no_soal) }}
+        NO SOAL : {{ dataSoalAktif }}
       </q-chip>
       <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
-        STATUS : {{ dataSoal.length }} SOAL BELUM DIJAWAB
+        STATUS : {{ soalBelumDiJawab.length }} SOAL BELUM DIJAWAB
         <!-- {{ dataSoal.length }} -
         {{ dataSoal }} -->
       </q-chip>
@@ -92,7 +185,9 @@ const soal_id = route.params.soal_id;
 
         <q-card-section class="q-pt-none">
           {{ soal.pertanyaan }}
+          <!-- --
           {{ soal.jawaban_ku }}
+          -- {{ tempJawabanTerpilih }} -->
         </q-card-section>
 
         <q-separator inset />
@@ -144,9 +239,11 @@ const soal_id = route.params.soal_id;
     <div class="q-pa-md">
       <q-list bordered class="q-pa-md">
         <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
-        <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban">
+        <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban" @click="doPilihJawaban(item, index)"
+          :class="{ 'bg-teal-5 text-white': tempJawabanTerpilih?.kode_jawaban == item.kode_jawaban }">
           <q-card-section>
-            <div class="text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}</div>
+            <div class=" text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}
+            </div>
           </q-card-section>
           <q-card-section class="q-pt-md bi-align-bottom">
             {{ item.jawaban }}
@@ -167,7 +264,7 @@ const soal_id = route.params.soal_id;
     </div>
 
     <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-      <q-btn color="primary" icon="check" label="simpan" @click="doBack()" />
+      <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
     </div>
     <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
       <q-btn color="green" icon="arrow_back_ios" @click="doBack()" />

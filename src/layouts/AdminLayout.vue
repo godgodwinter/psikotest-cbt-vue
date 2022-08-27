@@ -13,6 +13,7 @@ const storeUjian = useStoreUjian();
 const router = useRouter();
 const route = useRoute();
 const soalList = computed(() => storeUjian.getSoalList);
+const timer = computed(() => storeUjian.getTimer);
 // const id = route.params.id ? router.params.id : null;
 // const kategori_id = route.params.kategori_id ? router.params.kategori_id : null;
 // const kategori_proses = route.params.kategori_proses ? router.params.kategori_proses : null;
@@ -21,9 +22,11 @@ const soalList = computed(() => storeUjian.getSoalList);
 const timeWithSeconds = ref("-");
 storeUjian.$subscribe((mutation, state) => {
   if (storeUjian.getUjianAktif) {
-    console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
+    // console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
     if (Number.isInteger(storeUjian.getUjianAktif.sisa_waktu)) {
-      fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+      if (timeWithSeconds.value == '-') {
+        fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+      }
     } else {
       // Toast.danger("Info", "Paket Soal tidak ditemukan!")
       localStorage.removeItem("soal");
@@ -40,6 +43,7 @@ const fnTimerInterval = (second) => {
   let tes = setInterval(() => {
     // console.log(fnTimer(second));
     timeWithSeconds.value = fnTimer(second);
+    storeUjian.setTimer(fnTimer(second));
     if (second === 0) {
       Toast.babeng('Info', "Waktu Habis!")
       clearInterval(tes)
@@ -130,8 +134,28 @@ const toggleRightDrawer = () => {
 
 const doSoal = (id) => {
   let no_soal_id = id + 1;
-  let getSoal = storeUjian.getSoalList[id];
+
+  if (id || id === 0) {
+    localStorage.setItem('soalAktif', no_soal_id);
+  }
+  let nullId = localStorage.getItem('soalAktif') ? localStorage.getItem('soalAktif') : 1;
+  let soal_id = id || id === 0 ? id : nullId;
+  // console.log(soal_id);
   storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id]);
+  storeUjian.setSoalAktif(no_soal_id);
+  storeUjian.setTempJawabanTerpilih(null);
+
+  let getSoal = storeUjian.getSoalList[soal_id];
+  let getJawabanKu = storeUjian.getSoalList[soal_id].pilihan_jawaban.filter((item) => {
+    if (item.kode_jawaban === storeUjian.getSoalList[soal_id].jawaban_ku)
+      return item
+  })
+  console.log(id, getSoal, getSoal.jawaban_ku, getJawabanKu.length);
+  if (getJawabanKu.length > 0) {
+    // console.log(getJawabanKu[0]);
+    storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
+    // console.log(storeUjian.getTempJawabanTerpilih);
+  }
   // console.log(no_soal_id, getSoal);
   router.push({
     name: "admin-ujian-detail-proses",
@@ -139,7 +163,7 @@ const doSoal = (id) => {
       id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
       kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
       kategori_proses: storeUjian.getUjianAktif.id,
-      no_soal: no_soal_id
+      no_soal: id || id === 0 ? no_soal_id : nullId,
     },
   });
 };
@@ -173,9 +197,10 @@ const doLogout = async () => {
         </q-toolbar>
 
         <q-tabs align="left">
-          <q-route-tab :to="{ name: 'admin-dashboard' }" label="Home" />
+          <!-- <q-route-tab :to="{ name: 'admin-dashboard' }" label="Home" /> -->
           <q-route-tab :to="{ name: 'admin-ujian' }" label="Ujian" />
-          <q-route-tab>Sisa waktu : 90:00</q-route-tab>
+          <q-route-tab @click="doSoal(null)">Sisa waktu
+            : {{ timer }}</q-route-tab>
           <!-- <q-route-tab :to="{ name: 'admin-login' }" label="Login" /> -->
           <!-- <q-route-tab :to="{ name: 'home' }" label="Logout" /> -->
           <!-- <q-btn
@@ -221,14 +246,18 @@ const doLogout = async () => {
                 <q-icon name="work_history" />
                 <q-tooltip> Siswa Waktu </q-tooltip>
               </q-item-section>
-              <h4>{{ timeWithSeconds }}</h4>
+              <h4>{{ timer }}</h4>
             </q-item>
             <q-item>
               <div class="q-pa-md" style="max-width: 500px">
                 <p class="q-mt-md">Soal :</p>
                 <div class="q-gutter-sm">
-                  <q-btn color="teal" v-for="n, index in soalList" :key="`sm-${n.id}`" :label="index + 1"
-                    @click="doSoal(index)" />
+                  <span v-for="n, index in soalList" :key="`sm-${n.id}`" class="q-gutter-md">
+                    <q-btn :label="index + 1" color="teal" @click="doSoal(index)" class="q-mx-md "
+                      v-if="n.jawaban_ku != '-'" />
+                    <q-btn :label="index + 1" color="orange" @click="doSoal(index)" class="q-mx-md " v-else />
+                  </span>
+
                 </div>
               </div>
               <!-- <div class="q-pa-md" style="max-width: 500px">

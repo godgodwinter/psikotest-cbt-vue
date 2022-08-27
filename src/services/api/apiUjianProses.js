@@ -55,10 +55,28 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
     return false;
   }
 };
+const doInsertJawaban = async (ujian_proses_kategori_id, ujian_paketsoal_soal_id, kode_soal, ujian_paketsoal_soal_pilihanjawaban_id, kode_jawaban) => {
+  try {
+    const response = await Api.post(`siswa/data/dataujian/proses/kategori/4/insertjawaban}`, {
+      token: token,
+    });
+    const { data, success } = response;
+    if (success) {
+      
+      return true;
+    }
+    return false;
+  } catch (error) {
+    Toast.danger("Error", `Gagal menghubungkan ke Server 0!`);
+    console.error(error);
+    return false;
+  }
+};
 
 
 const apiUjianProses = {
   doMulaiUjian,
   doGetSoal,
+  doInsertJawaban,
 };
 export default apiUjianProses;
