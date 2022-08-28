@@ -108,15 +108,27 @@ const soal_id = route.params.soal_id;
 // dataSoal filter where index
 
 
-const doSimpan = () => {
+const doSimpan = async () => {
   // link:
   // ujian_proses_kategori_id ==kategori_proses
   //data :
   // ujian_paketsoal_soal_id,kode_soal,ujian_paketsoal_soal_pilihanjawaban_id,kode_jawaban
   if (tempJawabanTerpilih.value) {
-    // const resMulaiUjian = await ApiUjianProses.doInsertJawaban(kategori_proses, soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
-    console.log(kategori_proses);
-    console.log(soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
+    const doInsertJawaban = await ApiUjianProses.doInsertJawaban(kategori_proses, soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
+    if (doInsertJawaban) {
+      Toast.babeng("Info", "Jawaban berhasil disimpan");
+      // update data jawaban on local storage
+      let getSoalList = storeUjian.getSoalList;
+      getSoalList[storeUjian.getSoalAktif - 1].jawaban_ku = tempJawabanTerpilih.value.kode_jawaban;
+      storeUjian.setSoalList(getSoalList);
+      localStorage.setItem("soal", JSON.stringify(getSoalList));
+      fnSoalBelumDijawab();
+      // console.log(getSoalList[no_soal - 1].jawaban_ku, tempJawabanTerpilih.value.kode_jawaban);
+    } else {
+      Toast.danger("Gagal menyimpan jawaban")
+    };
+    // console.log(kategori_proses);
+    // console.log(soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
   } else {
     Toast.babeng('Jawaban Belum dipilih')
   }
@@ -154,11 +166,16 @@ if (no_soal > storeUjian.getSoalList.length) {
 // const getSoalBelumDijawab= ()=>{
 
 // }
-let soalBelumDiJawab = dataSoal.value.filter((item) => {
-  if (item.jawaban_ku == '-') {
-    return item;
-  }
-});
+let soalBelumDiJawab = ref(0);
+const fnSoalBelumDijawab = () => {
+  soalBelumDiJawab.value = dataSoal.value.filter((item) => {
+    if (item.jawaban_ku == '-') {
+      return item;
+    }
+  });
+
+}
+fnSoalBelumDijawab();
 
 </script>
 

@@ -56,15 +56,24 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
   }
 };
 const doInsertJawaban = async (ujian_proses_kategori_id, ujian_paketsoal_soal_id, kode_soal, ujian_paketsoal_soal_pilihanjawaban_id, kode_jawaban) => {
+  let dataForm = {
+    ujian_paketsoal_soal_id,
+    kode_soal,
+    ujian_paketsoal_soal_pilihanjawaban_id,
+    kode_jawaban
+  };
+  // console.log(ujian_proses_kategori_id, dataForm);
   try {
-    const response = await Api.post(`siswa/data/dataujian/proses/kategori/4/insertjawaban}`, {
-      token: token,
-    });
+    const response = await Api.post(`siswa/data/dataujian/proses/kategori/${ujian_proses_kategori_id}/insertjawaban`,
+      dataForm
+    );
     const { data, success } = response;
     if (success) {
-      
+
+      console.log(data);
       return true;
     }
+    console.log(response);
     return false;
   } catch (error) {
     Toast.danger("Error", `Gagal menghubungkan ke Server 0!`);
