@@ -4,6 +4,7 @@ import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 import API from "@/services/authServices";
 import apiUjian from "@/services/api/apiUjian";
+import apiUjianProses from "@/services/api/apiUjianProses";
 import Toast from "../components/lib/Toast";
 import { useStoreUjian } from "@/stores/ujian";
 import moment from "moment/min/moment-with-locales";
@@ -146,12 +147,12 @@ const doSoal = (id) => {
   storeUjian.setTempJawabanTerpilih(null);
 
   let getSoal = storeUjian.getSoalList[soal_id];
-  let getJawabanKu = storeUjian.getSoalList[soal_id].pilihan_jawaban.filter((item) => {
-    if (item.kode_jawaban === storeUjian.getSoalList[soal_id].jawaban_ku)
+  let getJawabanKu = storeUjian.getSoalList[soal_id]?.pilihan_jawaban.filter((item) => {
+    if (item.kode_jawaban === storeUjian.getSoalList[soal_id]?.jawaban_ku)
       return item
   })
-  console.log(id, getSoal, getSoal.jawaban_ku, getJawabanKu.length);
-  if (getJawabanKu.length > 0) {
+  // console.log(id, getSoal, getSoal.jawaban_ku, getJawabanKu.length);
+  if (getJawabanKu?.length > 0) {
     // console.log(getJawabanKu[0]);
     storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
     // console.log(storeUjian.getTempJawabanTerpilih);
@@ -172,6 +173,37 @@ const doLogout = async () => {
   const res = await API.doLogout();
   if (res === true) {
     router.push({ name: "login" });
+  }
+};
+
+const doFinish = async () => {
+  if (confirm("Apakah anda yakin mengakhiri sesi ujian ini? jika iya tidak bisa di batalkan.")) {
+    const res = await apiUjianProses.doFinish(storeUjian.getUjianAktif.id);
+    if (res) {
+      Toast.babeng("Sesi Ujian berhasil di akhiri!");
+      localStorage.removeItem("soal");
+      localStorage.removeItem("soalAktif");
+      storeUjian.setSoalList([]);
+      storeUjian.setSoalAktif(0);
+      storeUjian.setSoalAktifDetail([]);
+      storeUjian.setTempJawabanTerpilih(null);
+      storeUjian.setTimer(null);
+      storeUjian.setIsUjianAktif(false);
+      storeUjian.setUjianAktif({
+        id: "",
+        nama: "",
+        waktu: "",
+        tgl_mulai: "",
+        tgl_selesai: "",
+        soal: [],
+      });
+
+      router.push({ name: 'admin-ujian-index' });
+
+    } else {
+      Toast.warning("Info", "Gagal mengakhiri sesi ujian");
+    }
+    // console.log(storeUjian.getUjianAktif.id);
   }
 };
 </script>
@@ -199,7 +231,7 @@ const doLogout = async () => {
         <q-tabs align="left">
           <!-- <q-route-tab :to="{ name: 'admin-dashboard' }" label="Home" /> -->
           <q-route-tab :to="{ name: 'admin-ujian' }" label="Ujian" />
-          <q-route-tab @click="doSoal(null)">Sisa waktu
+          <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="doSoal(null)">Sisa waktu
             : {{ timer }}</q-route-tab>
           <!-- <q-route-tab :to="{ name: 'admin-login' }" label="Login" /> -->
           <!-- <q-route-tab :to="{ name: 'home' }" label="Logout" /> -->
@@ -238,7 +270,7 @@ const doLogout = async () => {
         </q-scroll-area>
       </q-drawer>
 
-      <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered v-if="soalList">
+      <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered v-if="storeUjian.getIsUjianAktif">
         <q-scroll-area class="fit">
           <q-list>
             <q-item clickable v-ripple class="q-pb-xs">
@@ -267,7 +299,7 @@ const doLogout = async () => {
                 </div>
               </div> -->
             </q-item>
-            <q-item v-ripple clickable>
+            <q-item v-ripple clickable @click="doFinish()">
               <q-item-section top avatar>
                 <q-avatar color="primary" text-color="white" icon="bluetooth" />
               </q-item-section>

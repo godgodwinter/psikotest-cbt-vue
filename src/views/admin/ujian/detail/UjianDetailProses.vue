@@ -283,10 +283,10 @@ fnSoalBelumDijawab();
     <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
       <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
     </div>
-    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+    <!-- <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
       <q-btn color="green" icon="arrow_back_ios" @click="doBack()" />
       <q-btn color="info" icon="arrow_forward_ios" @click="doNext()" />
-    </div>
+    </div> -->
   </div>
 </template>
 

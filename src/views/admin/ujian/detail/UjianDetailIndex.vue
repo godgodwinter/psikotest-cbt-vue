@@ -38,7 +38,7 @@ const columns = [
     sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
   },
   { name: "jml_soal", label: "Jumlah Soal", field: "jml_soal", sortable: true },
-  { name: "tipe", label: "Tipe", field: "tipe" },
+  // { name: "tipe", label: "Tipe", field: "tipe" },
   {
     name: "status",
     label: "Status",

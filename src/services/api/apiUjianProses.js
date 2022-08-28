@@ -83,9 +83,26 @@ const doInsertJawaban = async (ujian_proses_kategori_id, ujian_paketsoal_soal_id
 };
 
 
+const doFinish = async (ujian_proses_kategori_id) => {
+  try {
+    const response = await Api.post(`siswa/data/dataujian/proses/finish/${ujian_proses_kategori_id}`);
+    const { data, success } = response;
+    if (success) {
+      //remove data soal
+      //remove data soalAktif
+      return true;
+    }
+    return false;
+  } catch (error) {
+    Toast.danger("Error", `Gagal menghubungkan ke Server Finish!`);
+    console.error(error);
+    return false;
+  }
+};
 const apiUjianProses = {
   doMulaiUjian,
   doGetSoal,
   doInsertJawaban,
+  doFinish,
 };
 export default apiUjianProses;
