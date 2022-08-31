@@ -193,6 +193,10 @@ const doMulai = (kategori_id) => {
     params: { id, kategori_id },
   });
 };
+
+const doResume = (id) => {
+  console.log(id);
+}
 </script>
 <template>
   <BreadCrumb />
@@ -207,6 +211,10 @@ const doMulai = (kategori_id) => {
                   v-if="props.row.status == 'Belum'">
                   <q-tooltip> Mulai </q-tooltip>
                 </q-btn>
+                <q-btn round color="blue" icon="not_started" v-else-if="props.row.status == 'Aktif'"
+                  @click="doMulai(props.row.index)">
+                  <q-tooltip> Aktif </q-tooltip>
+                </q-btn>
                 <q-btn round color="red" v-else icon="not_started">
                   <q-tooltip> Selesai </q-tooltip>
                 </q-btn>
@@ -216,6 +224,8 @@ const doMulai = (kategori_id) => {
               <div class="q-pa-xs q-gutter-sm">
                 <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.index)"
                   v-if="props.row.status == 'Belum'" />
+                <q-btn color="blue" text-color="white" :label="props.row.status" v-else-if="props.row.status == 'Aktif'"
+                  @click="doMulai(props.row.index)" />
                 <q-btn color="red" text-color="white" :label="props.row.status" v-else />
               </div>
             </div>

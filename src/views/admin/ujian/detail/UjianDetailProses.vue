@@ -200,11 +200,7 @@ fnSoalBelumDijawab();
           <div class="text-h6">Pertanyaan</div>
         </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          {{ soal.pertanyaan }}
-          <!-- --
-          {{ soal.jawaban_ku }}
-          -- {{ tempJawabanTerpilih }} -->
+        <q-card-section class="q-pt-none" v-html="soal.pertanyaan">
         </q-card-section>
 
         <q-separator inset />
@@ -262,8 +258,7 @@ fnSoalBelumDijawab();
             <div class=" text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}
             </div>
           </q-card-section>
-          <q-card-section class="q-pt-md bi-align-bottom">
-            {{ item.jawaban }}
+          <q-card-section class="q-pt-md bi-align-bottom" v-html="item.jawaban">
           </q-card-section>
         </q-item>
         <!-- <q-item clickable v-ripple>

@@ -75,12 +75,12 @@ doPeriksa();
 
 const $q = useQuasar();
 const menuList = [
-  {
-    icon: "home",
-    label: "DASHBOARD",
-    separator: true,
-    link: "admin-dashboard",
-  },
+  // {
+  //   icon: "home",
+  //   label: "DASHBOARD",
+  //   separator: true,
+  //   link: "admin-dashboard",
+  // },
   {
     icon: "account_circle",
     label: "PROFILE",
@@ -93,18 +93,18 @@ const menuList = [
   //   separator: false,
   //   link: "admin-about",
   // },
-  {
-    icon: "cloud",
-    label: "LIST UJIAN",
-    separator: true,
-    link: "admin-ujian",
-  },
-  {
-    icon: "settings",
-    label: "PENGATURAN",
-    separator: false,
-    link: "admin-about",
-  },
+  // {
+  //   icon: "cloud",
+  //   label: "LIST UJIAN",
+  //   separator: true,
+  //   link: "admin-ujian",
+  // },
+  // {
+  //   icon: "settings",
+  //   label: "PENGATURAN",
+  //   separator: false,
+  //   link: "admin-about",
+  // },
 ];
 
 // get status
