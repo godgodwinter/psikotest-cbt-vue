@@ -49,15 +49,9 @@ const onToggleThema = () => {
 
         <q-tabs align="left">
           <q-route-tab to="/" label="Home" />
-          <q-route-tab to="/about" label="About" />
+          <!-- <q-route-tab to="/about" label="About" /> -->
           <q-route-tab to="/login" label="Login" />
-          <q-btn
-            dense
-            flat
-            round
-            icon="settings_brightness"
-            @click="onToggleThema()"
-          />
+          <q-btn dense flat round icon="settings_brightness" @click="onToggleThema()" />
         </q-tabs>
       </q-header>
 

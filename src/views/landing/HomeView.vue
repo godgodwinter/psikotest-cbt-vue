@@ -26,19 +26,16 @@ const lorem =
 </script>
 <template>
   <div>
-    <q-btn round size="sm" color="accent" @click="showNotif('left')">
+    <!-- <q-btn round size="sm" color="accent" @click="showNotif('left')">
       <q-icon name="arrow_back" />
     </q-btn>
     <q-btn round size="sm" color="accent" @click="showNotifTwo('left')">
       <q-icon name="arrow_forward" />
-    </q-btn>
+    </q-btn> -->
   </div>
   <card-a />
-  <div class="q-pa-xl row items-start q-gutter-lg">
-    <q-card
-      class="my-card text-white"
-      style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)"
-    >
+  <!-- <div class="q-pa-xl row items-start q-gutter-lg">
+    <q-card class="my-card text-white" style="background: radial-gradient(circle, #35a2ff 0%, #014a88 100%)">
       <q-card-section>
         <div class="text-h6">Our Changing Planet</div>
         <div class="text-subtitle2">by John Doe</div>
@@ -79,5 +76,5 @@ const lorem =
         tempor incididunt ut labore et dolore magna aliqua.
       </q-card-section>
     </q-card>
-  </div>
+  </div> -->
 </template>
