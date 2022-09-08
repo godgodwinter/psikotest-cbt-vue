@@ -48,17 +48,19 @@ const columns = [
 ];
 
 const dataAsli = ref([]);
-const getData = async (kelas_id) => {
+const getData = async (paketsoal_id) => {
   try {
+    console.log(paketsoal_id);
     const response = await Api.get(
-      `siswa/data/ujian/${id}/kategori_soal`
+      `siswa/data/ujian/proses_kelas/${id}/paketsoal/${paketsoal_id}/kategori_soal`
     );
     if (response.success) {
       dataAsli.value = response.data;
       rows.value = rows.value.concat(dataAsli.value.slice(0).map((r) => ({ ...r })));
     } else {
-      console.log('Lakukan Daftar');
-      doDaftar()
+      // console.log('Lakukan Daftar');
+      // doDaftar()
+      console.log('Gagal mengambil data!');
     }
 
     rows.value.forEach((row, index) => {
@@ -71,19 +73,22 @@ const getData = async (kelas_id) => {
     console.error(error);
   }
 };
-getData();
+// getData();
 const doDaftar = async () => {
   try {
     const response = await Api.post(`siswa/data/ujian/${id}/ujian_daftar`);
+    // console.log(response);
     if (response.success) {
-      getData();
+      getData(response.paketsoal_id);
     } else {
+      getData(response.paketsoal_id);
       console.log('Gagal daftar');
     }
   } catch (error) {
     console.error(error);
   }
 }
+doDaftar();
 const seed = [
   {
     nama: "Bahasa Indonesia",

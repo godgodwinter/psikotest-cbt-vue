@@ -107,7 +107,7 @@ const doDetail = (id) => {
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn round @click="doDetail(props.row.index)" icon="not_started" color="teal">
+                <q-btn round @click="doDetail(props.row.id)" icon="not_started" color="teal">
                   <q-tooltip> Detail {{ props.row.index }} </q-tooltip>
                 </q-btn>
               </div>
