@@ -176,7 +176,43 @@ const fnSoalBelumDijawab = () => {
 
 }
 fnSoalBelumDijawab();
+const doGetSoal = (id) => {
+  let no_soal_id = id;
 
+  // console.log(no_soal, no_soal_id);
+  if (id || id === 0) {
+    localStorage.setItem('soalAktif', no_soal_id);
+  }
+  storeUjian.setSoalAktif(no_soal_id);
+  localStorage.setItem('soalAktif', no_soal_id);
+  let nullId = localStorage.getItem('soalAktif') ? localStorage.getItem('soalAktif') : 1;
+  let soal_id = id || id === 0 ? id : nullId;
+  // console.log(soal_id);
+  storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id - 1]);
+  storeUjian.setTempJawabanTerpilih(null);
+
+  let getSoal = storeUjian.getSoalList[soal_id - 1];
+  let getJawabanKu = storeUjian.getSoalList[soal_id - 1]?.pilihan_jawaban.filter((item) => {
+    if (item.kode_jawaban === storeUjian.getSoalList[soal_id - 1]?.jawaban_ku)
+      return item
+  })
+  // console.log(id, getSoal, getSoal.jawaban_ku, getJawabanKu.length);
+  if (getJawabanKu?.length > 0) {
+    // console.log(getJawabanKu[0]);
+    storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
+    // console.log(storeUjian.getTempJawabanTerpilih);
+  }
+  // console.log(no_soal_id, getSoal);
+  router.push({
+    name: "admin-ujian-detail-proses",
+    params: {
+      id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
+      kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
+      kategori_proses: storeUjian.getUjianAktif.id,
+      no_soal: no_soal_id,
+    },
+  });
+};
 </script>
 
 <template>
@@ -278,10 +314,11 @@ fnSoalBelumDijawab();
     <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
       <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
     </div>
-    <!-- <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-      <q-btn color="green" icon="arrow_back_ios" @click="doBack()" />
-      <q-btn color="info" icon="arrow_forward_ios" @click="doNext()" />
-    </div> -->
+    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+      <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif-1)" v-if="dataSoalAktif>1" />
+      <q-btn color="info" icon="arrow_forward_ios" @click="doGetSoal(parseInt(dataSoalAktif)+1)"
+        v-if="dataSoalAktif<storeUjian.getSoalList.length" />
+    </div>
   </div>
 </template>
 

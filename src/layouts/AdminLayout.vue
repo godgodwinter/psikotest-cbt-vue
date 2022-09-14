@@ -29,12 +29,12 @@ storeUjian.$subscribe((mutation, state) => {
         // console.log(loadTimer.value);
         if (loadTimer.value < 1) {
           loadTimer.value = 1;
-          console.log(loadTimer.value);
+          // console.log(loadTimer.value);
 
           let second = storeUjian.getUjianAktif.sisa_waktu;
           myInterval.value = setInterval(() => {
             // console.log(storeUjian.getUjianAktif.sisa_waktu)
-            console.log(fnTimer(second));
+            // console.log(fnTimer(second));
             timeWithSeconds.value = fnTimer(second);
             storeUjian.setTimer(fnTimer(second));
             if (second === 0) {
@@ -336,10 +336,11 @@ const doFinish = async () => {
             </q-item>
             <q-item>
               <div class="q-pa-md" style="max-width: 500px">
+                <p class="q-mt-md">Soal Aktif : {{ storeUjian.getSoalAktif }}</p>
                 <p class="q-mt-md">Soal :</p>
                 <div class="q-gutter-sm">
                   <span v-for="n, index in soalList" :key="`sm-${n.id}`" class="q-gutter-md">
-                    <q-btn :label="index + 1" color="teal" @click="doSoal(index)" class="q-mx-md "
+                    <q-btn :label="index + 1" :color="'blue'" @click="doSoal(index)" class="q-mx-md "
                       v-if="n.jawaban_ku != '-'" />
                     <q-btn :label="index + 1" color="orange" @click="doSoal(index)" class="q-mx-md " v-else />
                   </span>
