@@ -15,6 +15,7 @@ const router = useRouter();
 const route = useRoute();
 const soalList = computed(() => storeUjian.getSoalList);
 const timer = computed(() => storeUjian.getTimer);
+const ujianAktif = computed(() => storeUjian.getUjianAktif);
 // const id = route.params.id ? router.params.id : null;
 // const kategori_id = route.params.kategori_id ? router.params.kategori_id : null;
 // const kategori_proses = route.params.kategori_proses ? router.params.kategori_proses : null;
@@ -23,10 +24,28 @@ const timer = computed(() => storeUjian.getTimer);
 const timeWithSeconds = ref("-");
 storeUjian.$subscribe((mutation, state) => {
   if (storeUjian.getUjianAktif) {
-    // console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
     if (Number.isInteger(storeUjian.getUjianAktif.sisa_waktu)) {
       if (timeWithSeconds.value == '-') {
-        fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+        // console.log(loadTimer.value);
+        if (loadTimer.value < 1) {
+          loadTimer.value = 1;
+          console.log(loadTimer.value);
+
+          let second = storeUjian.getUjianAktif.sisa_waktu;
+          myInterval.value = setInterval(() => {
+            // console.log(storeUjian.getUjianAktif.sisa_waktu)
+            console.log(fnTimer(second));
+            timeWithSeconds.value = fnTimer(second);
+            storeUjian.setTimer(fnTimer(second));
+            if (second === 0) {
+              Toast.babeng('Info', "Waktu Habis!")
+              clearInterval(myInterval.value)
+            } else {
+              second--
+            }
+          }, 1000);
+
+        }
       }
     } else {
       // Toast.danger("Info", "Paket Soal tidak ditemukan!")
@@ -37,23 +56,25 @@ storeUjian.$subscribe((mutation, state) => {
   }
 });
 
-const fnTimerInterval = (second) => {
-  // setInterval(function () {
-  //   timeWithSeconds.value = fnTimer(second);
-  // }, 1000)
-  let tes = setInterval(() => {
-    // console.log(fnTimer(second));
-    timeWithSeconds.value = fnTimer(second);
-    storeUjian.setTimer(fnTimer(second));
-    if (second === 0) {
-      Toast.babeng('Info', "Waktu Habis!")
-      clearInterval(tes)
-    } else {
-      second--
-    }
-  }, 1000)
-  // console.log(tes);
-}
+const myInterval = ref(null);
+// const fnTimerInterval = (second) => {
+//   // setInterval(function () {
+//   //   timeWithSeconds.value = fnTimer(second);
+//   // }, 1000)
+//   myInterval.value = setInterval(() => {
+//     // console.log(storeUjian.getUjianAktif.sisa_waktu)
+//     console.log(fnTimer(second));
+//     timeWithSeconds.value = fnTimer(second);
+//     storeUjian.setTimer(fnTimer(second));
+//     if (second === 0) {
+//       Toast.babeng('Info', "Waktu Habis!")
+//       clearInterval(myInterval.value)
+//     } else {
+//       second--
+//     }
+//   }, 1000);
+//   // console.log(tes);
+// }
 
 const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
@@ -72,6 +93,37 @@ const doPeriksa = async () => {
   }
 };
 doPeriksa();
+
+const loadTimer = ref(0);
+// if (storeUjian.getUjianAktif) {
+//   console.log('1', Number.isInteger(storeUjian.getUjianAktif.sisa_waktu), ujianAktif.value.sisa_waktu);
+//   // console.log(storeUjian.getUjianAktif.sisa_waktu, fnTimer(storeUjian.getUjianAktif.sisa_waktu));
+//   if (Number.isInteger(storeUjian.getUjianAktif.sisa_waktu)) {
+//     console.log('2');
+//     if (timeWithSeconds.value == '-') {
+//       console.log('atur waktu');
+//       // fnTimerInterval(storeUjian.getUjianAktif.sisa_waktu)
+//       let second = storeUjian.getUjianAktif.sisa_waktu;
+//       myInterval.value = setInterval(() => {
+//         // console.log(storeUjian.getUjianAktif.sisa_waktu)
+//         console.log(fnTimer(second));
+//         timeWithSeconds.value = fnTimer(second);
+//         storeUjian.setTimer(fnTimer(second));
+//         if (second === 0) {
+//           Toast.babeng('Info', "Waktu Habis!")
+//           clearInterval(myInterval.value)
+//         } else {
+//           second--
+//         }
+//       }, 1000);
+//     }
+//   } else {
+//     // Toast.danger("Info", "Paket Soal tidak ditemukan!")
+//     localStorage.removeItem("soal");
+
+//     localStorage.removeItem("soalAktif");
+//   }
+// }
 
 const $q = useQuasar();
 const menuList = [
@@ -197,7 +249,9 @@ const doFinish = async () => {
         tgl_selesai: "",
         soal: [],
       });
-
+      // clear Interval
+      // fnTimerInterval(0)
+      clearInterval(myInterval.value)
       router.push({ name: 'admin-ujian-index' });
 
     } else {
