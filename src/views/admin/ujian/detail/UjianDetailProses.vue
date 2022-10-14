@@ -15,6 +15,7 @@ const id = route.params.id ? route.params.id : null;
 const kategori_id = route.params.kategori_id;
 const kategori_proses = route.params.kategori_proses;
 const no_soal = route.params.no_soal ? route.params.no_soal : 1;
+const dataFileAudio = ref(null);
 
 storeUjian.$subscribe((mutation, state) => {
   // soal.value = dataSoal.value[dataSoalAktif.value];
@@ -237,9 +238,15 @@ const doGetSoal = (id) => {
         </q-card-section>
 
         <q-card-section class="q-pt-none" v-html="soal.pertanyaan">
+
         </q-card-section>
 
         <q-separator inset />
+        <audio controls v-if="soal.audio" class="q-pa-md">
+          <!-- <source src="horse.ogg" type="audio/ogg"> -->
+          <source :src="soal.audio" type="audio/mpeg">
+          <!-- Your browser does not support the audio element. -->
+        </audio>
 
         <q-card-section>
           <div class="q-pa-md">
