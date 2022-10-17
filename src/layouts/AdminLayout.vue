@@ -135,6 +135,12 @@ const menuList = [
   // },
   {
     icon: "account_circle",
+    label: "UJIAN",
+    separator: false,
+    link: "admin-ujian",
+  },
+  {
+    icon: "account_circle",
     label: "PROFILE",
     separator: false,
     link: "admin-about",
