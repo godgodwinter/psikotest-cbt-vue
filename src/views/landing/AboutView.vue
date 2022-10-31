@@ -13,7 +13,7 @@ const doGetMyProfile = async (token) => {
     const response = await Api.post(`siswa/auth/me_ujian`, {
       token: token,
     });
-    console.log(response);
+    // console.log(response);
     data.value = response;
 
     // return true;
