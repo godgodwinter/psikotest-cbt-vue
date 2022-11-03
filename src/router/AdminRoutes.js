@@ -22,15 +22,16 @@ const AdminRoutes = [
         path: `${prefix}/home`,
         name: `${prefixName}dashboard`,
         meta: {
-          title: "Beranda",
+          title: "Profile",
           icon: "mdi-home",
           breadcrumb: {
-            name: "Beranda",
+            name: "Profile",
             path: `${prefix}/home`,
             goto: `${prefixName}dashboard`,
           },
         },
-        component: () => import("@/views/admin/dashboard/DashboardIndex.vue"),
+        // component: () => import("@/views/admin/dashboard/DashboardIndex.vue"),
+        component: () => import("@/views/landing/AboutView.vue"),
       },
       {
         path: `${prefix}/about`,
