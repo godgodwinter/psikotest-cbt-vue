@@ -206,13 +206,13 @@ const doResume = (id) => {
 <template>
   <BreadCrumb />
   <div class="q-pa-md">
-    <q-table title="KATEGORI SOAL 22" :rows="rows" :columns="columns" row-key="index">
+    <q-table title="KATEGORI SOAL" :rows="rows" :columns="columns" row-key="index">
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn round @click="doMulai(props.row.index)" icon="not_started" color="teal"
+                <q-btn round @click="doMulai(props.row.id)" icon="not_started" color="teal"
                   v-if="props.row.status == 'Belum'">
                   <q-tooltip> Mulai </q-tooltip>
                 </q-btn>
@@ -236,7 +236,7 @@ const doResume = (id) => {
                 <q-btn color="blue" text-color="white" :label="props.row.status" v-else-if="props.row.status == 'Aktif'"
                   @click="doMulai(props.row.index)" />
                 <q-btn color="orange" text-color="white" :label="props.row.status"
-                  v-else-if="props.row.status == 'Reset'" @click="doMulai(props.row.index)" />
+                  v-else-if="props.row.status == 'Reset'" @click="doMulai(props.row.id)" />
                 <q-btn color="red" text-color="white" :label="props.row.status" v-else />
               </div>
             </div>
