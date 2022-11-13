@@ -1,4 +1,7 @@
 <script setup>
+const BASE_URL = import.meta.env.VITE_API_URLFE
+  ? import.meta.env.VITE_API_URLFE
+  : "http://localhost:3333/";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
@@ -21,6 +24,9 @@ const ujianAktif = computed(() => storeUjian.getUjianAktif);
 // const kategori_proses = route.params.kategori_proses ? router.params.kategori_proses : null;
 
 
+function redir() {
+  window.location = `${BASE_URL}pages/admin/ujianindex`;
+}
 const timeWithSeconds = ref("-");
 storeUjian.$subscribe((mutation, state) => {
   if (storeUjian.getUjianAktif) {
@@ -40,6 +46,7 @@ storeUjian.$subscribe((mutation, state) => {
             if (second === 0) {
               Toast.babeng('Info', "Waktu Habis!")
               clearInterval(myInterval.value)
+              redir();
             } else {
               second--
             }

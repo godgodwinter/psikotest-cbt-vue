@@ -1,4 +1,7 @@
 <script setup>
+const BASE_URL = import.meta.env.VITE_API_URLFE
+  ? import.meta.env.VITE_API_URLFE
+  : "http://localhost:3333/";
 import { ref } from "vue"
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import ApiUjianProses from "@/services/api/apiUjianProses";
@@ -17,6 +20,9 @@ const kategori_proses = route.params.kategori_proses;
 const no_soal = route.params.no_soal ? route.params.no_soal : 1;
 const dataFileAudio = ref(null);
 
+function redir() {
+  window.location = `${BASE_URL}pages/admin/ujianindex`;
+}
 storeUjian.$subscribe((mutation, state) => {
   // soal.value = dataSoal.value[dataSoalAktif.value];
   // console.log(dataSoalAktif.value, soal.value);
@@ -121,6 +127,7 @@ const doSimpan = async () => {
       Toast.babeng("Info", "Jawaban berhasil disimpan");
       // update data jawaban on local storage
       let getSoalList = storeUjian.getSoalList;
+      // console.log("----aa---", storeUjian.getSoalList, "----", storeUjian.getSoalAktif);
       getSoalList[storeUjian.getSoalAktif - 1].jawaban_ku = tempJawabanTerpilih.value.kode_jawaban;
       storeUjian.setSoalList(getSoalList);
       localStorage.setItem("soal", JSON.stringify(getSoalList));
@@ -164,6 +171,7 @@ if (no_soal > storeUjian.getSoalList.length) {
       no_soal: 1,
     },
   });
+  // redir();
 }
 // const getSoalBelumDijawab= ()=>{
 
@@ -217,6 +225,12 @@ const doGetSoal = (id) => {
     },
   });
 };
+// console.log('====================================');
+// console.log(storeUjian.getSoalAktif);
+// console.log('====================================');
+// if (storeUjian.getSoalAktif == undefined) {
+//   router.go();
+// }
 </script>
 
 <template>
@@ -233,30 +247,31 @@ const doGetSoal = (id) => {
       </q-chip>
     </div>
   </div>
-  <div v-if="soal">
-    <div class="q-pa-md row items-start q-gutter-md">
-      <q-card flat bordered style="width: 100%">
-        <q-card-section>
-          <div class="text-h6">Pertanyaan</div>
-        </q-card-section>
+  <div v-if="storeUjian.getSoalAktif">
+    <div v-if="soal">
+      <div class="q-pa-md row items-start q-gutter-md">
+        <q-card flat bordered style="width: 100%">
+          <q-card-section>
+            <div class="text-h6">Pertanyaan</div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none" v-html="soal.pertanyaan">
+          <q-card-section class="q-pt-none" v-html="soal.pertanyaan">
 
-        </q-card-section>
+          </q-card-section>
 
-        <q-separator inset />
-        <audio controls v-if="soal.audio" class="q-pa-md">
-          <!-- <source src="horse.ogg" type="audio/ogg"> -->
-          <source :src="soal.audio" type="audio/mpeg">
-          <!-- Your browser does not support the audio element. -->
-        </audio>
+          <q-separator inset />
+          <audio controls v-if="soal.audio" class="q-pa-md">
+            <!-- <source src="horse.ogg" type="audio/ogg"> -->
+            <source :src="soal.audio" type="audio/mpeg">
+            <!-- Your browser does not support the audio element. -->
+          </audio>
 
-        <q-card-section>
-          <div class="q-pa-md">
-            <div class="q-col-gutter-md row items-start">
-              <div class="col-6">
+          <q-card-section>
+            <div class="q-pa-md">
+              <div class="q-col-gutter-md row items-start">
+                <div class="col-6">
 
-                <!-- <q-img
+                  <!-- <q-img
                 src="https://cdn.quasar.dev/img/image-src.png"
                 srcset="https://cdn.quasar.dev/img/image-1x.png 400w,
                 https://cdn.quasar.dev/img/image-2x.png 800w,
@@ -272,7 +287,7 @@ const doGetSoal = (id) => {
                   With srcset & sizes
                 </div>
               </q-img> -->
-                <!-- <q-img
+                  <!-- <q-img
                 src="https://cdn.quasar.dev/img/parallax2.jpg"
                 srcset="https://cdn.quasar.dev/img/parallax2.jpg 400w,
                 https://cdn.quasar.dev/img/parallax2.jpg 800w,
@@ -289,25 +304,25 @@ const doGetSoal = (id) => {
                   Caption
                 </div>
               </q-img> -->
+                </div>
               </div>
             </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <div class="q-pa-md">
-      <q-list bordered class="q-pa-md">
-        <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
-        <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban" @click="doPilihJawaban(item, index)"
-          :class="{ 'bg-teal-5 text-white': tempJawabanTerpilih?.kode_jawaban == item.kode_jawaban }">
-          <q-card-section>
-            <div class=" text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}
-            </div>
           </q-card-section>
-          <q-card-section class="q-pt-md bi-align-bottom" v-html="item.jawaban">
-          </q-card-section>
-        </q-item>
-        <!-- <q-item clickable v-ripple>
+        </q-card>
+      </div>
+      <div class="q-pa-md">
+        <q-list bordered class="q-pa-md">
+          <!-- <q-item clickable v-ripple class="bg-teal-5 text-white" v-for="item, index in soal.pilihan_jawaban"> -->
+          <q-item clickable v-ripple v-for="item, index in soal.pilihan_jawaban" @click="doPilihJawaban(item, index)"
+            :class="{ 'bg-teal-5 text-white': tempJawabanTerpilih?.kode_jawaban == item.kode_jawaban }">
+            <q-card-section>
+              <div class=" text-h6">{{ Fungsi.fnNumberToAlphabet(index + 1) }}
+              </div>
+            </q-card-section>
+            <q-card-section class="q-pt-md bi-align-bottom" v-html="item.jawaban">
+            </q-card-section>
+          </q-item>
+          <!-- <q-item clickable v-ripple>
         <q-card-section>
           <div class="text-h6">D</div>
         </q-card-section>
@@ -318,17 +333,26 @@ const doGetSoal = (id) => {
           temporibus fuga. Voluptatibus, suscipit.
         </q-card-section>
       </q-item> -->
-      </q-list>
+        </q-list>
+      </div>
+
+      <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+        <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
+      </div>
+      <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
+        <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif - 1)" v-if="dataSoalAktif > 1" />
+        <q-btn color="info" icon="arrow_forward_ios" @click="doGetSoal(parseInt(dataSoalAktif) + 1)"
+          v-if="dataSoalAktif < storeUjian.getSoalList.length" />
+      </div>
     </div>
 
-    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-      <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
+  </div>
+  <div v-else>
+
+    <div class="q-pa-md q-gutter-md">
+      <q-btn color="primary" @click="router.go()">Refresh</q-btn>
     </div>
-    <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-      <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif - 1)" v-if="dataSoalAktif > 1" />
-      <q-btn color="info" icon="arrow_forward_ios" @click="doGetSoal(parseInt(dataSoalAktif)+1)"
-        v-if="dataSoalAktif < storeUjian.getSoalList.length" />
-    </div>
+
   </div>
 </template>
 

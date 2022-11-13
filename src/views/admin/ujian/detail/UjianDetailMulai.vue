@@ -1,4 +1,7 @@
 <script setup>
+const BASE_URL = import.meta.env.VITE_API_URLFE
+  ? import.meta.env.VITE_API_URLFE
+  : "http://localhost:3333/";
 import Api from "@/axios/axios";
 import { ref } from "vue";
 import Toast from "@/components/lib/Toast";
@@ -12,21 +15,68 @@ const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
 const kategori_id = route.params.kategori_id;
+
+
+// const doSoal = (id) => {
+//   let no_soal_id = id + 1;
+
+//   if (id || id === 0) {
+//     localStorage.setItem('soalAktif', no_soal_id);
+//   }
+//   let nullId = localStorage.getItem('soalAktif') ? localStorage.getItem('soalAktif') : 1;
+//   let soal_id = id || id === 0 ? id : nullId;
+//   // console.log(soal_id);
+//   storeUjian.setSoalAktifDetail(storeUjian.getSoalList[id]);
+//   storeUjian.setSoalAktif(no_soal_id);
+//   storeUjian.setTempJawabanTerpilih(null);
+
+//   let getSoal = storeUjian.getSoalList[soal_id];
+//   let getJawabanKu = storeUjian.getSoalList[soal_id]?.pilihan_jawaban.filter((item) => {
+//     if (item.kode_jawaban === storeUjian.getSoalList[soal_id]?.jawaban_ku)
+//       return item
+//   })
+//   // console.log(id, getSoal, getSoal.jawaban_ku, getJawabanKu.length);
+//   if (getJawabanKu?.length > 0) {
+//     // console.log(getJawabanKu[0]);
+//     storeUjian.setTempJawabanTerpilih(getJawabanKu[0])
+//     // console.log(storeUjian.getTempJawabanTerpilih);
+//   }
+//   // console.log(no_soal_id, getSoal);
+//   router.push({
+//     name: "admin-ujian-detail-proses",
+//     params: {
+//       id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
+//       kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
+//       kategori_proses: storeUjian.getUjianAktif.id,
+//       no_soal: id || id === 0 ? no_soal_id : nullId,
+//     },
+//   });
+// };
+function redir(id, kategori_id, kategori_proses, no_soal) {
+  // localStorage.setItem("soalAktif", 1)
+  // storeUjian.setSoalAktif(1);
+  window.location = `${BASE_URL}pages/admin/ujian/${id}/detail/${kategori_id}/proses/${kategori_proses}/soal/${no_soal}`;
+}
 const getUjianAktif = async () => {
   // 1. load ujian aktif
 
   const resGetUjianAktif = await ApiUjian.doPeriksaUjianSaya();
   // 2. jika berhail load get Data then redirect
   if (resGetUjianAktif) {
-    router.push({
-      name: "admin-ujian-detail-proses",
-      params: {
-        id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
-        kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
-        kategori_proses: storeUjian.getUjianAktif.id,
-        no_soal: 1,
-      },
-    });
+    // router.push({
+    //   name: "admin-ujian-detail-proses",
+    //   params: {
+    //     id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
+    //     kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
+    //     kategori_proses: storeUjian.getUjianAktif.id,
+    //     no_soal: 1,
+    //   },
+    // });
+    // doSoal(1);
+
+    let kategori_proses = storeUjian.getUjianAktif.id;
+    let no_soal = 1;
+    redir(id, kategori_id, kategori_proses, no_soal);
 
   } else {
     Toast.danger('Info', 'Gagal memuat ujian aktif')
