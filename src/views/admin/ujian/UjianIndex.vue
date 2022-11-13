@@ -56,6 +56,7 @@ const getData = async (kelas_id) => {
       `siswa/data/ujian`
     );
     dataAsli.value = response.data;
+    // console.log(dataAsli.value);
 
     rows.value = rows.value.concat(dataAsli.value.slice(0).map((r) => ({ ...r })));
     // }

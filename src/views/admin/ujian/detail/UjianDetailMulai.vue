@@ -23,7 +23,8 @@ const getUjianAktif = async () => {
       params: {
         id: storeUjian.getUjianAktif.ujian_proses_kelas_id,
         kategori_id: storeUjian.getUjianAktif.ujian_paketsoal_kategori_id,
-        kategori_proses: storeUjian.getUjianAktif.id
+        kategori_proses: storeUjian.getUjianAktif.id,
+        no_soal: 1,
       },
     });
 

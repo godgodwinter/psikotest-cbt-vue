@@ -9,11 +9,17 @@ const storeAuth = useStoreAuth();
 
 const token = storeAuth.getToken;
 
-const doMulaiUjian = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id) => {
+const doMulaiUjian = async (
+  ujian_proses_kelas_id,
+  ujian_paketsoal_kategori_id
+) => {
   try {
-    const response = await Api.post(`siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/mulai_ujian`, {
-      token: token,
-    });
+    const response = await Api.post(
+      `siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/mulai_ujian`,
+      {
+        token: token,
+      }
+    );
     const { data, success } = response;
     if (success) {
       return true;
@@ -26,25 +32,29 @@ const doMulaiUjian = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id) 
   }
 };
 
-const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, ujian_proses_kategori_id) => {
+const doGetSoal = async (
+  ujian_proses_kelas_id,
+  ujian_paketsoal_kategori_id,
+  ujian_proses_kategori_id
+) => {
   try {
-    const response = await Api.post(`siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/getsoal/${ujian_proses_kategori_id}`, {
-      token: token,
-    });
+    const response = await Api.post(
+      `siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/getsoal/${ujian_proses_kategori_id}`,
+      {
+        token: token,
+      }
+    );
     const { data, success } = response;
     if (success) {
       // save data to local storage
-      localStorage.setItem('soal', JSON.stringify(data));
+      localStorage.setItem("soal", JSON.stringify(data));
       storeUjian.setSoalList(data);
-      if (localStorage.getItem('soalAktif')) {
-        console.log(localStorage.getItem('soalAktif'));
+      if (localStorage.getItem("soalAktif")) {
+        console.log(localStorage.getItem("soalAktif"));
       } else {
-        localStorage.setItem('soalAktif', JSON.stringify(0));
+        localStorage.setItem("soalAktif", JSON.stringify(0));
         storeUjian.setSoalAktif(0);
       }
-
-
-
 
       return true;
     }
@@ -55,21 +65,27 @@ const doGetSoal = async (ujian_proses_kelas_id, ujian_paketsoal_kategori_id, uji
     return false;
   }
 };
-const doInsertJawaban = async (ujian_proses_kategori_id, ujian_paketsoal_soal_id, kode_soal, ujian_paketsoal_soal_pilihanjawaban_id, kode_jawaban) => {
+const doInsertJawaban = async (
+  ujian_proses_kategori_id,
+  ujian_paketsoal_soal_id,
+  kode_soal,
+  ujian_paketsoal_soal_pilihanjawaban_id,
+  kode_jawaban
+) => {
   let dataForm = {
     ujian_paketsoal_soal_id,
     kode_soal,
     ujian_paketsoal_soal_pilihanjawaban_id,
-    kode_jawaban
+    kode_jawaban,
   };
   // console.log(ujian_proses_kategori_id, dataForm);
   try {
-    const response = await Api.post(`siswa/data/dataujian/proses/kategori/${ujian_proses_kategori_id}/insertjawaban`,
+    const response = await Api.post(
+      `siswa/data/dataujian/proses/kategori/${ujian_proses_kategori_id}/insertjawaban`,
       dataForm
     );
     const { data, success } = response;
     if (success) {
-
       console.log(data);
       return true;
     }
@@ -82,10 +98,11 @@ const doInsertJawaban = async (ujian_proses_kategori_id, ujian_paketsoal_soal_id
   }
 };
 
-
 const doFinish = async (ujian_proses_kategori_id) => {
   try {
-    const response = await Api.post(`siswa/data/dataujian/proses/finish/${ujian_proses_kategori_id}`);
+    const response = await Api.post(
+      `siswa/data/dataujian/proses/finish/${ujian_proses_kategori_id}`
+    );
     const { data, success } = response;
     if (success) {
       //remove data soal

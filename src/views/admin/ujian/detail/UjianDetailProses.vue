@@ -42,6 +42,7 @@ storeUjian.$subscribe((mutation, state) => {
 
     // console.log(getSoal, parseInt(nomer));
     if (getSoal) {
+
       let getJawabanKu = storeUjian.getSoalList[parseInt(nomer) - 1]?.pilihan_jawaban.filter((item) => {
         if (item.kode_jawaban === storeUjian.getSoalList[parseInt(nomer) - 1].jawaban_ku)
           return item
@@ -55,7 +56,7 @@ storeUjian.$subscribe((mutation, state) => {
 
     }
   }
-
+  fnSoalBelumDijawab();
   // console.log(soal.value.jawaban_ku);
 });
 
@@ -167,13 +168,15 @@ if (no_soal > storeUjian.getSoalList.length) {
 // const getSoalBelumDijawab= ()=>{
 
 // }
-let soalBelumDiJawab = ref(0);
+// let soalBelumDiJawab = ref(0);
 const fnSoalBelumDijawab = () => {
-  soalBelumDiJawab.value = dataSoal.value.filter((item) => {
+  let temp = dataSoal.value.filter((item) => {
     if (item.jawaban_ku == '-') {
       return item;
     }
   });
+  storeUjian.setSoalBelumDiJawab(temp.length);
+  // console.log(temp.length, storeUjian.getSoalBelumDiJawab);
 
 }
 fnSoalBelumDijawab();
@@ -224,7 +227,7 @@ const doGetSoal = (id) => {
         NO SOAL : {{ dataSoalAktif }}
       </q-chip>
       <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
-        STATUS : {{ soalBelumDiJawab.length }} SOAL BELUM DIJAWAB
+        STATUS : {{ storeUjian.getSoalBelumDiJawab }} SOAL BELUM DIJAWAB
         <!-- {{ dataSoal.length }} -
         {{ dataSoal }} -->
       </q-chip>
@@ -322,9 +325,9 @@ const doGetSoal = (id) => {
       <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
     </div>
     <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-      <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif-1)" v-if="dataSoalAktif>1" />
+      <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif - 1)" v-if="dataSoalAktif > 1" />
       <q-btn color="info" icon="arrow_forward_ios" @click="doGetSoal(parseInt(dataSoalAktif)+1)"
-        v-if="dataSoalAktif<storeUjian.getSoalList.length" />
+        v-if="dataSoalAktif < storeUjian.getSoalList.length" />
     </div>
   </div>
 </template>

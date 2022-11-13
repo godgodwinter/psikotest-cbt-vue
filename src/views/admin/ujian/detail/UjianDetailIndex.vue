@@ -57,6 +57,7 @@ const getData = async (paketsoal_id) => {
     if (response.success) {
       dataAsli.value = response.data;
       rows.value = rows.value.concat(dataAsli.value.slice(0).map((r) => ({ ...r })));
+      // console.log(dataAsli.value);
     } else {
       // console.log('Lakukan Daftar');
       // doDaftar()
@@ -217,11 +218,11 @@ const doResume = (id) => {
                   <q-tooltip> Mulai </q-tooltip>
                 </q-btn>
                 <q-btn round color="blue" icon="not_started" v-else-if="props.row.status == 'Aktif'"
-                  @click="doMulai(props.row.index)">
+                  @click="doMulai(props.row.id)">
                   <q-tooltip> Aktif </q-tooltip>
                 </q-btn>
                 <q-btn round color="orange" icon="not_started" v-else-if="props.row.status == 'Reset'"
-                  @click="doMulai(props.row.index)">
+                  @click="doMulai(props.row.id)">
                   <q-tooltip> Aktif </q-tooltip>
                 </q-btn>
                 <q-btn round color="red" v-else icon="not_started">
@@ -231,10 +232,10 @@ const doResume = (id) => {
             </div>
             <div v-if="col.name == 'status'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.index)"
+                <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.id)"
                   v-if="props.row.status == 'Belum'" />
                 <q-btn color="blue" text-color="white" :label="props.row.status" v-else-if="props.row.status == 'Aktif'"
-                  @click="doMulai(props.row.index)" />
+                  @click="doMulai(props.row.id)" />
                 <q-btn color="orange" text-color="white" :label="props.row.status"
                   v-else-if="props.row.status == 'Reset'" @click="doMulai(props.row.id)" />
                 <q-btn color="red" text-color="white" :label="props.row.status" v-else />
