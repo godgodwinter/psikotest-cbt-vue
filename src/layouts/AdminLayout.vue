@@ -300,6 +300,8 @@ const doFinish = async () => {
           <q-route-tab :to="{ name: 'admin-ujian' }" label="Ujian" />
           <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="doSoal(null)">Sisa waktu
             : {{ timer }}</q-route-tab>
+          <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="toggleRightDrawer">MENU SOAL
+          </q-route-tab>
           <!-- <q-route-tab :to="{ name: 'admin-login' }" label="Login" /> -->
           <!-- <q-route-tab :to="{ name: 'home' }" label="Logout" /> -->
           <!-- <q-btn
