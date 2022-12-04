@@ -24,18 +24,25 @@ const doGoto = (name) => {
     {{ item.params?.id }}
   </div> -->
   <div class="q-pa-md q-gutter-md">
+    <!-- {{ dataBreadcrumb }} -->
     <q-breadcrumbs class="text-grey" active-color="purple">
       <template v-slot:separator>
         <q-icon size="1.2em" name="arrow_forward" color="purple" />
       </template>
-      <q-breadcrumbs-el
-        v-for="(item, index) in dataBreadcrumb"
-        @click="doGoto(item.data.goto, item.params)"
-        :key="index"
-        :label="item.data.name"
-        :icon="item.data.icon ? item.data.icon : 'widgets'"
-        to="#"
-      />
+      <q-breadcrumbs-el v-for="(item, index) in dataBreadcrumb" @click="doGoto(item.data.goto, item.params)"
+        :key="index" :label="item.data.name" :icon="item.data.icon ? item.data.icon : 'widgets'" to="#" />
+
     </q-breadcrumbs>
   </div>
+
+  <!-- <div>
+    <li v-for="(item, index) in dataBreadcrumb" @click="doGoto(item.data.goto, params)" :key="index">
+
+      <label class="capitalize font-medium pb-2"> {{ item.data.name }}
+        {{ item.data.goto }}
+        {{ item.params }}
+        {{ item.data.params }}
+      </label>
+    </li>
+  </div> -->
 </template>
