@@ -18,14 +18,26 @@ const router = useRouter();
 const route = useRoute();
 const soalList = computed(() => storeUjian.getSoalList);
 const timer = computed(() => storeUjian.getTimer);
+const ujian_proses_kelas_id = ref(null);
 const ujianAktif = computed(() => storeUjian.getUjianAktif);
+storeUjian.$subscribe((mutation, state) => {
+  // console.log('====================================');
+  // console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id);
+  // console.log('====================================');
+  if (ujian_proses_kelas_id.value == null) {
+    ujian_proses_kelas_id.value = storeUjian.getUjianAktif.ujian_proses_kelas_id;
+    console.log(ujian_proses_kelas_id.value);
+  }
+});
 // const id = route.params.id ? router.params.id : null;
 // const kategori_id = route.params.kategori_id ? router.params.kategori_id : null;
 // const kategori_proses = route.params.kategori_proses ? router.params.kategori_proses : null;
-
-
+// if (ujianAktif.value) {
+//   console.log(soalList.value, ujianAktif.value.ujian_proses_kelas_id);
+// }
 function redir() {
-  window.location = `${BASE_URL}pages/admin/ujianindex`;
+  window.location = `${BASE_URL}pages/admin/ujian/${ujian_proses_kelas_id.value}/detailindex`;
+  // window.location = `${BASE_URL}pages/admin/ujianindex`;
 }
 const timeWithSeconds = ref("-");
 storeUjian.$subscribe((mutation, state) => {
@@ -87,7 +99,7 @@ const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
   if (res) {
-    Toast.ujian("Info", "Ujian Aktif ditemukan !");
+    // Toast.ujian("Info", "Ujian Aktif ditemukan !");
     // soalList.value = storeUjian.getSoalList;
     // console.log(storeUjian.getSoalList);
     // console.log('====================================');
@@ -265,7 +277,8 @@ const doFinish = async () => {
       // clear Interval
       // fnTimerInterval(0)
       clearInterval(myInterval.value)
-      router.push({ name: 'admin-ujian-index' });
+      router.push({ name: 'admin-ujian-detail-index', params: { id: ujian_proses_kelas_id.value } });
+      // router.push({ name: 'admin-ujian-index' });
 
     } else {
       Toast.warning("Info", "Gagal mengakhiri sesi ujian");
