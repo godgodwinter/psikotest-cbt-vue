@@ -3,6 +3,9 @@ import { ref } from "vue";
 import Api from "@/axios/axios";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRouter } from "vue-router";
+import moment from "moment/min/moment-with-locales";
+import localization from "moment/locale/id";
+moment.updateLocale("id", localization);
 const router = useRouter();
 const columns = [
   {
@@ -30,7 +33,7 @@ const columns = [
   {
     name: "tgl",
     align: "center",
-    label: "Tanggal Ujian",
+    label: "Batas Pengerjaan Ujian",
     field: "tgl",
     sortable: true,
     sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
@@ -98,6 +101,18 @@ const doDetail = (id) => {
   // console.log(id);
   router.push({ name: "admin-ujian-detail-index", params: { id } });
 };
+
+const selisihTgl = (tgl) => {
+  let a = moment(tgl).add(0, 'hours');
+  let b = moment().format("YYYY-MM-DD");
+  let result = a.diff(b, 'hours');
+  // console.log(a, b, result);
+  if (result < 0) {
+    return "Ujian telah berakhir";
+  } else {
+    return "Buka";
+  }
+}
 </script>
 <template>
   <BreadCrumb />
@@ -108,9 +123,23 @@ const doDetail = (id) => {
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
               <div class="q-pa-xs q-gutter-sm">
-                <q-btn round @click="doDetail(props.row.id)" icon="not_started" color="teal">
-                  <q-tooltip> Detail {{ props.row.index }} </q-tooltip>
+                <q-btn round @click="doDetail(props.row.id)" icon="not_started" color="teal"
+                  v-if="selisihTgl(props.row.tgl) == 'Buka'">
+                  <q-tooltip> Detail {{ selisihTgl(props.row.tgl) }} </q-tooltip>
                 </q-btn>
+                <q-btn round icon="not_started" color="red" v-else>
+                  <q-tooltip> Detail {{ selisihTgl(props.row.tgl) }} </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+            <div v-else-if="col.name == 'tgl'">
+              <div class="q-pa-xs q-gutter-sm">
+                <!-- <q-btn round @click="doDetail(props.row.id)" icon="not_started" color="teal">
+                  <q-tooltip> Detail {{ props.row.index }} </q-tooltip>
+                </q-btn> -->
+
+                {{ moment(props.row.tgl).format("DD MMMM YYYY") }} -
+                {{ selisihTgl(props.row.tgl) }}
               </div>
             </div>
             <div v-else>{{ col.value }}</div>

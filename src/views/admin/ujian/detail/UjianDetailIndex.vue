@@ -3,6 +3,10 @@ import Api from "@/axios/axios";
 import { ref } from "vue";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRouter, useRoute } from "vue-router";
+import moment from "moment/min/moment-with-locales";
+import localization from "moment/locale/id";
+import Toast from "@/components/lib/Toast";
+moment.updateLocale("id", localization);
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id;
@@ -202,6 +206,41 @@ const doMulai = (kategori_id) => {
 
 const doResume = (id) => {
   console.log(id);
+}
+const dataParrent = ref(null)
+const getDataParrent = async () => {
+  try {
+    const response = await Api.get(
+      `siswa/data/ujian/${id}`
+    );
+    // da
+    dataParrent.value = response.data;
+    console.log(dataParrent.value);
+    if (selisihTgl(dataParrent.value.tgl) != 'Buka') {
+      Toast.babeng("Warning", "Ujian telah berakhir")
+      router.push({
+        name: "admin-ujian-index"
+      });
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+getDataParrent();
+
+
+const selisihTgl = (tgl) => {
+  let a = moment(tgl).add(0, 'hours');
+  let b = moment().format("YYYY-MM-DD");
+  let result = a.diff(b, 'hours');
+  // console.log(a, b, result);
+  if (result < 0) {
+    return "Ujian telah berakhir";
+  } else {
+    return "Buka";
+  }
 }
 </script>
 <template>

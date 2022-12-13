@@ -4,12 +4,15 @@ const BASE_URL = import.meta.env.VITE_API_URLFE
   : "http://localhost:3333/";
 import Api from "@/axios/axios";
 import { ref } from "vue";
-import Toast from "@/components/lib/Toast";
 import BreadCrumb from "@/components/breadcrumb/BabengBreadcrumb.vue";
 import { useRoute, useRouter } from "vue-router";
 import ApiUjianProses from "@/services/api/apiUjianProses";
 import ApiUjian from "@/services/api/apiUjian";
 import { useStoreUjian } from "@/stores/ujian";
+import moment from "moment/min/moment-with-locales";
+import localization from "moment/locale/id";
+import Toast from "@/components/lib/Toast";
+moment.updateLocale("id", localization);
 const storeUjian = useStoreUjian();
 const route = useRoute();
 const router = useRouter();
@@ -17,6 +20,41 @@ const id = route.params.id;
 const kategori_id = route.params.kategori_id;
 
 
+const dataParrent = ref(null)
+const getDataParrent = async () => {
+  try {
+    const response = await Api.get(
+      `siswa/data/ujian/${id}`
+    );
+    // da
+    dataParrent.value = response.data;
+    console.log(dataParrent.value);
+    if (selisihTgl(dataParrent.value.tgl) != 'Buka') {
+      Toast.babeng("Warning", "Ujian telah berakhir")
+      router.push({
+        name: "admin-ujian-index"
+      });
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+getDataParrent();
+
+
+const selisihTgl = (tgl) => {
+  let a = moment(tgl).add(0, 'hours');
+  let b = moment().format("YYYY-MM-DD");
+  let result = a.diff(b, 'hours');
+  // console.log(a, b, result);
+  if (result < 0) {
+    return "Ujian telah berakhir";
+  } else {
+    return "Buka";
+  }
+}
 // const doSoal = (id) => {
 //   let no_soal_id = id + 1;
 
