@@ -246,7 +246,7 @@ const selisihTgl = (tgl) => {
 <template>
   <BreadCrumb />
   <div class="q-pa-md">
-    <q-table title="KATEGORI SOAL" :rows="rows" :columns="columns" row-key="index">
+    <q-table title="KATEGORI SOAL" :rows="rows" :columns="columns" row-key="index" :rows-per-page-options="[100]">
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
