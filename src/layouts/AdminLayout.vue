@@ -87,7 +87,7 @@ const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
   if (res) {
-    Toast.babeng("Info", "Ujian Aktif ditemukan !");
+    Toast.ujian("Info", "Ujian Aktif ditemukan !");
     // soalList.value = storeUjian.getSoalList;
     // console.log(storeUjian.getSoalList);
     // console.log('====================================');
@@ -355,8 +355,9 @@ const doFinish = async () => {
                 <p class="q-mt-md">Soal :</p>
                 <div class="q-gutter-sm">
                   <span v-for="n, index in soalList" :key="`sm-${n.id}`" class="q-gutter-md">
-                    <q-btn :label="index + 1" :color="'blue'" @click="doSoal(index)" class="q-mx-md "
-                      v-if="n.jawaban_ku != '-'" />
+                    <q-btn :label="index + 1
+                      // +'(' + n.jawaban_ku + ')'
+                    " :color="'blue'" @click="doSoal(index)" class="q-mx-md " v-if="n.jawaban_ku != '-'" />
                     <q-btn :label="index + 1" color="orange" @click="doSoal(index)" class="q-mx-md " v-else />
                   </span>
 

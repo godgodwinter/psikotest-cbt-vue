@@ -96,9 +96,11 @@ const getDataSoal = async () => {
   const resMulaiUjian = await ApiUjianProses.doGetSoal(id, kategori_id, kategori_proses);
   // jika gagal toast error
   if (resMulaiUjian) {
-    Toast.babeng("Info", "Berhasil memuat soal ujian")
+    // Toast.babeng("Info", "Berhasil memuat soal ujian")
+    console.log("Berhasil memuat soal ujian");
   } else {
-    Toast.danger("Info", "Gagal memuat soal ujian 2")
+    // Toast.danger("Info", "Gagal memuat soal ujian 2")
+    console.log("Gagal memuat soal ujian");
     localStorage.removeItem("soal");
     localStorage.removeItem("soalAktif");
   }
@@ -124,7 +126,8 @@ const doSimpan = async () => {
   if (tempJawabanTerpilih.value) {
     const doInsertJawaban = await ApiUjianProses.doInsertJawaban(kategori_proses, soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
     if (doInsertJawaban) {
-      Toast.babeng("Info", "Jawaban berhasil disimpan");
+      Toast.ujian("Info", "Jawaban berhasil disimpan");
+      // console.log("Jawaban berhasil disimpan");
       // update data jawaban on local storage
       let getSoalList = storeUjian.getSoalList;
       // console.log("----aa---", storeUjian.getSoalList, "----", storeUjian.getSoalAktif);
@@ -134,12 +137,14 @@ const doSimpan = async () => {
       fnSoalBelumDijawab();
       // console.log(getSoalList[no_soal - 1].jawaban_ku, tempJawabanTerpilih.value.kode_jawaban);
     } else {
-      Toast.danger("Gagal menyimpan jawaban")
+      // Toast.danger("Gagal menyimpan jawaban")
+      console.log("Gagal menyimpan jawaban");
     };
     // console.log(kategori_proses);
     // console.log(soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
   } else {
-    Toast.babeng('Jawaban Belum dipilih')
+    // Toast.babeng('Jawaban Belum dipilih')
+    console.log("Jawaban Belum dipilih");
   }
 }
 
@@ -147,7 +152,8 @@ const doSimpan = async () => {
 // console.log(storeUjian.getSoalList.length);
 // console.log('====================================');
 if (no_soal > storeUjian.getSoalList.length) {
-  Toast.babeng('Soal tidak ditemukan');
+  // Toast.babeng('Soal tidak ditemukan');
+  console.log("Soal tidak ditemuan");
   storeUjian.setSoalAktifDetail(storeUjian.getSoalList[0]);
   storeUjian.setSoalAktif(0);
   storeUjian.setTempJawabanTerpilih(null);

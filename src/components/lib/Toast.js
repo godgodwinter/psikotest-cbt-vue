@@ -15,6 +15,24 @@ const babeng = (title = 'Info !', description = '') => {
   );
 };
 
+
+const ujian = (title = 'Info !', description = '',timeout=1000) => {
+  createToast(
+    {
+      title,
+      description,
+    },
+    {
+    timeout
+    },
+    {
+      type: 'default',
+      transition: 'bounce',
+      position: 'top-right',
+    },
+  );
+};
+
 const warning = (title = 'Info !', description = '') => {
   createToast(
     {
@@ -62,5 +80,6 @@ const Toast = {
   warning,
   success,
   danger,
+  ujian
 };
 export default Toast;

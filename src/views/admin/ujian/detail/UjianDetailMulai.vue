@@ -128,8 +128,8 @@ const onMulaiUjian = async () => {
     const resMulaiUjian = await ApiUjianProses.doMulaiUjian(id, kategori_id);
     // jika gagal toast error
     if (resMulaiUjian) {
-      Toast.babeng("Info", "Berhasil memulai ujian")
-
+      // Toast.babeng("Info", "Berhasil memulai ujian")
+      console.log("Berhasil memulai ujian");
       getUjianAktif();
     } else {
       Toast.danger("Info", "Gagal memulai ujian")
