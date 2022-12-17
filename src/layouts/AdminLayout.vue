@@ -373,7 +373,7 @@ const fnToSecond = (timer) => {
                 <q-icon name="work_history" />
                 <q-tooltip> Siswa Waktu </q-tooltip>
               </q-item-section>
-              <h4 v-if="fnToSecond(timer) <= 600" class="text-red text-italic">{{ timer }} </h4>
+              <h4 v-if="fnToSecond(timer) <= 120" class="text-red text-italic">{{ timer }} </h4>
               <h4 v-else class="text-gray">{{ timer }} </h4>
             </q-item>
             <q-item>
