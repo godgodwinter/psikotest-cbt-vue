@@ -18,6 +18,7 @@ const router = useRouter();
 const route = useRoute();
 const soalList = computed(() => storeUjian.getSoalList);
 const timer = computed(() => storeUjian.getTimer);
+const timerSecond = computed(() => storeUjian.getUjianAktif.sisa_waktu);
 const ujian_proses_kelas_id = ref(null);
 const ujianAktif = computed(() => storeUjian.getUjianAktif);
 storeUjian.$subscribe((mutation, state) => {
@@ -286,6 +287,18 @@ const doFinish = async () => {
     // console.log(storeUjian.getUjianAktif.id);
   }
 };
+
+const fnToSecond = (timer) => {
+  let seconds = 0;
+  if (timer) {
+    let hms = timer;   // your input string
+    let a = hms.split(':'); // split it at the colons
+
+    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+  }
+  return seconds;
+}
 </script>
 
 <template>
@@ -360,7 +373,8 @@ const doFinish = async () => {
                 <q-icon name="work_history" />
                 <q-tooltip> Siswa Waktu </q-tooltip>
               </q-item-section>
-              <h4>{{ timer }}</h4>
+              <h4 v-if="fnToSecond(timer) <= 600" class="text-red text-italic">{{ timer }} </h4>
+              <h4 v-else class="text-gray">{{ timer }} </h4>
             </q-item>
             <q-item>
               <div class="q-pa-md" style="max-width: 500px">

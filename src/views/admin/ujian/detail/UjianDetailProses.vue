@@ -343,7 +343,9 @@ const doGetSoal = (id) => {
       </div>
 
       <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
-        <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" />
+        <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()"
+          v-if="tempJawabanTerpilih?.kode_jawaban" />
+        <q-btn color="primary" icon="check" label="simpan" @click="doSimpan()" v-else />
       </div>
       <div style="width: 100%" class="row justify-end q-gutter-md q-pa-md">
         <q-btn color="green" icon="arrow_back_ios" @click="doGetSoal(dataSoalAktif - 1)" v-if="dataSoalAktif > 1" />
