@@ -126,7 +126,7 @@ const doSimpan = async () => {
   if (tempJawabanTerpilih.value) {
     const doInsertJawaban = await ApiUjianProses.doInsertJawaban(kategori_proses, soal.value.id, soal.value.kode_soal, tempJawabanTerpilih.value.id, tempJawabanTerpilih.value.kode_jawaban);
     if (doInsertJawaban) {
-      // Toast.ujian("Info", "Jawaban berhasil disimpan");
+      Toast.ujian("Info", "Jawaban berhasil disimpan");
       // console.log("Jawaban berhasil disimpan");
       // update data jawaban on local storage
       let getSoalList = storeUjian.getSoalList;
