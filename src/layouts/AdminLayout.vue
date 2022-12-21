@@ -403,7 +403,7 @@ const fnToSecond = (timer) => {
               <q-item-section top avatar>
                 <!-- <q-avatar color="primary" text-color="white" icon="mdiContentSaveCheck" /> -->
 
-                <q-btn color="primary" icon="swipe_down" label="FINISH" />
+                <q-btn color="primary" icon="save" label="FINISH" />
 
                 <!-- <q-btn clickable v-ripple class="q-pb-xs"> -->
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
