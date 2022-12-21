@@ -324,8 +324,9 @@ const fnToSecond = (timer) => {
         <q-tabs align="left">
           <!-- <q-route-tab :to="{ name: 'admin-dashboard' }" label="Home" /> -->
           <q-route-tab :to="{ name: 'admin-ujian' }" label="Ujian" />
-          <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="doSoal(null)">Sisa waktu
-            : {{ timer }}</q-route-tab>
+          <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="doSoal(null)">
+            <h5 v-if="fnToSecond(timer) <= 120" class="text-red"> {{ timer }}</h5>
+          </q-route-tab>
           <q-route-tab v-if="storeUjian.getIsUjianAktif" @click="toggleRightDrawer">MENU SOAL
           </q-route-tab>
           <!-- <q-route-tab :to="{ name: 'admin-login' }" label="Login" /> -->
