@@ -1,11 +1,14 @@
 import { createToast } from 'mosha-vue-toastify';
 import 'mosha-vue-toastify/dist/style.css';
 
-const babeng = (title = 'Info !', description = '') => {
+const babeng = (title = 'Info !', description = '',timeout=1000) => {
   createToast(
     {
       title,
       description,
+    },
+    {
+    timeout
     },
     {
       type: 'default',
@@ -33,11 +36,14 @@ const ujian = (title = 'Info !', description = '',timeout=1000) => {
   );
 };
 
-const warning = (title = 'Info !', description = '') => {
+const warning = (title = 'Info !', description = '',timeout=1000) => {
   createToast(
     {
       title,
       description,
+    },
+    {
+    timeout
     },
     {
       type: 'warning',
@@ -47,11 +53,14 @@ const warning = (title = 'Info !', description = '') => {
   );
 };
 
-const danger = (title = 'Info !', description = '') => {
+const danger = (title = 'Info !', description = '',timeout=1000) => {
   createToast(
     {
       title,
       description,
+    },
+    {
+    timeout
     },
     {
       type: 'danger',
@@ -61,11 +70,14 @@ const danger = (title = 'Info !', description = '') => {
   );
 };
 
-const success = (title = 'Info !', description = '') => {
+const success = (title = 'Info !', description = '',timeout=1000) => {
   createToast(
     {
       title,
       description,
+    },
+    {
+    timeout
     },
     {
       type: 'success',
