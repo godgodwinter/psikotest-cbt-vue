@@ -292,7 +292,7 @@ doPeriksa();
             </div>
             <div v-if="col.name == 'status'">
               <div class="q-pa-xs q-gutter-sm" v-if="periksa !== true">
-                <q-btn color=" secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.id)"
+                <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.id)"
                   v-if="props.row.status == 'Belum'" />
                 <q-btn color="blue" text-color="white" :label="props.row.status" v-else-if="props.row.status == 'Aktif'"
                   @click="doMulai(props.row.id)" />
