@@ -240,7 +240,7 @@ const doGetSoal = (id) => {
 </script>
 
 <template>
-  <BreadCrumb />
+  <!-- <BreadCrumb /> -->
   <div class="q-pa-md q-gutter-md">
     <div>
       <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
