@@ -17,16 +17,16 @@ const doMulaiUjian = async (
     console.log('====================================');
     console.log(ujian_proses_kelas_id, ujian_paketsoal_kategori_id);
     console.log('====================================');
-    // const response = await Api.post(
-    //   `siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/mulai_ujian`,
-    //   {
-    //     token: token,
-    //   }
-    // );
-    // const { data, success } = response;
-    // if (success) {
-    //   return true;
-    // }
+    const response = await Api.post(
+      `siswa/data/dataujian/${ujian_proses_kelas_id}/paketsoal/${ujian_paketsoal_kategori_id}/mulai_ujian`,
+      {
+        token: token,
+      }
+    );
+    const { data, success } = response;
+    if (success) {
+      return true;
+    }
     return false;
   } catch (error) {
     Toast.danger("Error", `Gagal menghubungkan ke Server!`);
