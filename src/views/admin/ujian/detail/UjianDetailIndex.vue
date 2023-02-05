@@ -265,6 +265,9 @@ const doPeriksa = async () => {
 doPeriksa();
 </script>
 <template>
+  <div class="q-pa-md q-gutter-md">
+    <q-btn color="primary" @click="router.go()">Refresh</q-btn>
+  </div>
   <BreadCrumb />
   <div class="q-pa-md">
     <q-table title="KATEGORI SOAL " :rows="rows" :columns="columns" row-key="index" :rows-per-page-options="[100]">
