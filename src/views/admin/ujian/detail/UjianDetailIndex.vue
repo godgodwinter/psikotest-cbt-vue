@@ -6,6 +6,7 @@ import { useRouter, useRoute } from "vue-router";
 import moment from "moment/min/moment-with-locales";
 import localization from "moment/locale/id";
 import Toast from "@/components/lib/Toast";
+import apiUjian from "@/services/api/apiUjian";
 moment.updateLocale("id", localization);
 const route = useRoute();
 const router = useRouter();
@@ -245,16 +246,33 @@ const selisihTgl = (tgl) => {
     return "Buka";
   }
 }
+
+const periksa = ref(true);
+const doPeriksa = async () => {
+  const res = await apiUjian.doPeriksaUjianSaya();
+  periksa.value = res;
+  if (res) {
+    console.log(res);
+    // Toast.ujian("Info", "Ujian Aktif ditemukan !");
+    // soalList.value = storeUjian.getSoalList;
+    // console.log(storeUjian.getSoalList);
+    // console.log('====================================');
+    // console.log(storeUjian.getUjianAktif);
+    // console.log(storeUjian.getUjianAktif.ujian_proses_kelas_id, storeUjian.getUjianAktif.ujian_paketsoal_kategori_id, storeUjian.getUjianAktif.id);
+    // console.log('====================================');
+  }
+};
+doPeriksa();
 </script>
 <template>
   <BreadCrumb />
   <div class="q-pa-md">
-    <q-table title="KATEGORI SOAL" :rows="rows" :columns="columns" row-key="index" :rows-per-page-options="[100]">
+    <q-table title="KATEGORI SOAL " :rows="rows" :columns="columns" row-key="index" :rows-per-page-options="[100]">
       <template v-slot:body="props">
         <q-tr :props="props" :key="`m_${props.row.index}`">
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <div v-if="col.name == 'actions'">
-              <div class="q-pa-xs q-gutter-sm">
+              <div class="q-pa-xs q-gutter-sm" v-if="periksa !== true">
                 <q-btn round @click="doMulai(props.row.id)" icon="not_started" color="teal"
                   v-if="props.row.status == 'Belum'">
                   <q-tooltip> Mulai </q-tooltip>
@@ -273,13 +291,22 @@ const selisihTgl = (tgl) => {
               </div>
             </div>
             <div v-if="col.name == 'status'">
-              <div class="q-pa-xs q-gutter-sm">
-                <q-btn color="secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.id)"
+              <div class="q-pa-xs q-gutter-sm" v-if="periksa !== true">
+                <q-btn color=" secondary" text-color="black" :label="props.row.status" @click="doMulai(props.row.id)"
                   v-if="props.row.status == 'Belum'" />
                 <q-btn color="blue" text-color="white" :label="props.row.status" v-else-if="props.row.status == 'Aktif'"
                   @click="doMulai(props.row.id)" />
                 <q-btn color="orange" text-color="white" :label="props.row.status"
                   v-else-if="props.row.status == 'Reset'" @click="doMulai(props.row.id)" />
+                <q-btn color="red" text-color="white" :label="props.row.status" v-else />
+              </div>
+              <div v-else>
+                <q-btn color="secondary" text-color="black" :label="props.row.status"
+                  v-if="props.row.status == 'Belum'" />
+                <q-btn color="blue" text-color="white" :label="props.row.status"
+                  v-else-if="props.row.status == 'Aktif'" />
+                <q-btn color="orange" text-color="white" :label="props.row.status"
+                  v-else-if="props.row.status == 'Reset'" />
                 <q-btn color="red" text-color="white" :label="props.row.status" v-else />
               </div>
             </div>

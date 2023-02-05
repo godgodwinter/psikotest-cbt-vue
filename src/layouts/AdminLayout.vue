@@ -102,7 +102,7 @@ const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
   if (res) {
-    // console.log(res);
+    console.log(res);
     // Toast.ujian("Info", "Ujian Aktif ditemukan !");
     // soalList.value = storeUjian.getSoalList;
     // console.log(storeUjian.getSoalList);
