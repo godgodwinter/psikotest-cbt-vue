@@ -208,6 +208,9 @@ const doResume = (id) => {
   console.log(id);
 }
 const dataParrent = ref(null)
+console.log('====================================');
+console.log(`proses_kelas_id:${id}`);
+console.log('====================================');
 const getDataParrent = async () => {
   try {
     const response = await Api.get(
