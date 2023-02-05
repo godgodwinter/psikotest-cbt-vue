@@ -55,9 +55,7 @@ const columns = [
 const dataAsli = ref([]);
 const getData = async (kelas_id) => {
   try {
-    const response = await Api.get(
-      `siswa/data/ujian`
-    );
+    const response = await Api.get(`siswa/data/ujian`);
     dataAsli.value = response.data;
     // console.log(dataAsli.value);
 
@@ -66,7 +64,6 @@ const getData = async (kelas_id) => {
     rows.value.forEach((row, index) => {
       row.index = index + 1;
     });
-
 
     return response.data;
   } catch (error) {

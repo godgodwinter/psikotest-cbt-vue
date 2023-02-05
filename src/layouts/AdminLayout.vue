@@ -1,7 +1,4 @@
 <script setup>
-const BASE_URL = import.meta.env.VITE_API_URLFE
-  ? import.meta.env.VITE_API_URLFE
-  : "http://localhost:3333/";
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
@@ -12,6 +9,11 @@ import Toast from "../components/lib/Toast";
 import { useStoreUjian } from "@/stores/ujian";
 import moment from "moment/min/moment-with-locales";
 import localization from "moment/locale/id";
+
+const BASE_URL = import.meta.env.VITE_API_URLFE
+  ? import.meta.env.VITE_API_URLFE
+  : "http://localhost:3333/";
+
 moment.updateLocale("id", localization);
 const storeUjian = useStoreUjian();
 const router = useRouter();
@@ -100,6 +102,7 @@ const fnTimer = (second) => moment.utc(second * 1000).format('HH:mm:ss');
 const doPeriksa = async () => {
   const res = await apiUjian.doPeriksaUjianSaya();
   if (res) {
+    // console.log(res);
     // Toast.ujian("Info", "Ujian Aktif ditemukan !");
     // soalList.value = storeUjian.getSoalList;
     // console.log(storeUjian.getSoalList);

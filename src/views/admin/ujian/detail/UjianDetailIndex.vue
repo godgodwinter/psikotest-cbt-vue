@@ -54,7 +54,7 @@ const columns = [
 const dataAsli = ref([]);
 const getData = async (paketsoal_id) => {
   try {
-    console.log(paketsoal_id);
+    console.log(id, paketsoal_id);
     const response = await Api.get(
       `siswa/data/ujian/proses_kelas/${id}/paketsoal/${paketsoal_id}/kategori_soal`
     );

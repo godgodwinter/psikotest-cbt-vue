@@ -13,22 +13,10 @@ const soal_id = route.params.soal_id;
   <BreadCrumb />
   <div class="q-pa-md q-gutter-md">
     <div>
-      <q-chip
-        size="18px"
-        icon="bookmark"
-        dense
-        color="secondary"
-        text-color="white"
-      >
+      <q-chip size="18px" icon="bookmark" dense color="secondary" text-color="white">
         NO SOAL : {{ parseInt(soal_id) + 1 }}
       </q-chip>
-      <q-chip
-        size="18px"
-        icon="bookmark"
-        dense
-        color="deep-orange"
-        text-color="white"
-      >
+      <q-chip size="18px" icon="bookmark" dense color="deep-orange" text-color="white">
         STATUS : BELUM DIJAWAB
       </q-chip>
     </div>
